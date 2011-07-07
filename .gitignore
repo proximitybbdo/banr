@@ -1,5 +1,5 @@
-.DS_Store
-.settings
+.DS_Store?
+.settings/
 .actionScriptProperties
 .flexProperties
 .project
