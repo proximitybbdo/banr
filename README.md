@@ -9,5 +9,5 @@ How to use
 -- work in progress --
 
 
-With love from [Proximity BBDO](htt://www.proximity.bbdo.be)
+With love from [Proximity BBDO](http://www.proximity.bbdo.be)
 ------------------------------------------------------------
