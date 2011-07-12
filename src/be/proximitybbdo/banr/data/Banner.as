@@ -1,4 +1,6 @@
 package be.proximitybbdo.banr.data {
+	import be.proximity.framework.events.FrameworkEventDispatcher;
+	import be.proximitybbdo.banr.events.BanrEvent;
 	import be.proximitybbdo.banr.utils.BannerUtils;
 	
 	import flash.display.DisplayObject;
@@ -40,10 +42,11 @@ package be.proximitybbdo.banr.data {
 			height = loadr.contentLoaderInfo.height;
 		}
 		
-		public function save(delay:Number):void {
+		public function save(quality:Number, delay:Number):void {
 			setTimeout(function():void {
-				BannerUtils.saveAsJPG((loadr.content as DisplayObject), file.nativePath, width, height, 80);
-			}, delay);
+				BannerUtils.saveAsJPG((loadr.content as DisplayObject), file.nativePath, width, height, quality);
+				FrameworkEventDispatcher.getInstance().dispatchEvent(new BanrEvent(BanrEvent.PROCESSING_FINISHED));
+			}, delay*1000);
 		}
 		
 		private function onLoadError(e:IOErrorEvent):void {

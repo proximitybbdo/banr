@@ -31,17 +31,16 @@ package be.proximitybbdo.banr.data {
 			this.container = container;
 		}
 		
-		public function process():void {
-			for each(var b:Banner in banners) {
-				b.save(15000);
-			}
+		public function process(quality:Number, delay:Number):void {
+			for each(var r:Row in rows)
+				r.saveBanner(quality, delay);
 		}
 		
 		public function addBanner(file:File):void {
 			var banner:Banner = new Banner(file);
 			banners.push(banner);
 			
-			//addUIRow(banner);
+			addUIRow(banner);
 		}
 		
 		private function addUIRow(banner:Banner):void {
@@ -51,6 +50,14 @@ package be.proximitybbdo.banr.data {
 			container.addChild(r);
 		}
 		
+		
+		public function clear():void {
+			while(container.numChildren > 0)
+				container.removeChildAt(container.numChildren-1);
+			
+			rows = [];
+			banners = [];
+		}
 	}
 }
 
