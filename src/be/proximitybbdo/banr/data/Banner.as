@@ -45,7 +45,7 @@ package be.proximitybbdo.banr.data {
 		public function save(quality:Number, delay:Number):void {
 			setTimeout(function():void {
 				BannerUtils.saveAsJPG((loadr.content as DisplayObject), file.nativePath, width, height, quality);
-				FrameworkEventDispatcher.getInstance().dispatchEvent(new BanrEvent(BanrEvent.PROCESSING_FINISHED));
+				FrameworkEventDispatcher.getInstance().dispatchEvent(new BanrEvent(BanrEvent.PROCESSING_SINGLE_FINISHED));
 			}, delay*1000);
 		}
 		

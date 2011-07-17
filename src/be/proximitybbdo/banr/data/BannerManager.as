@@ -1,4 +1,6 @@
 package be.proximitybbdo.banr.data {
+	import be.proximity.framework.events.FrameworkEventDispatcher;
+	import be.proximitybbdo.banr.events.BanrEvent;
 	import be.proximitybbdo.banr.ui.Row;
 	
 	import flash.display.Loader;
@@ -12,6 +14,10 @@ package be.proximitybbdo.banr.data {
 		private var loadr:Loader;
 		private var container:Sprite;
 		private var rows:Array;
+		
+		private var quality:Number;
+		private var delay:Number;
+		private var currentRow:Row = null;
 		
 		private static var _instance:BannerManager;
 		
@@ -29,11 +35,28 @@ package be.proximitybbdo.banr.data {
 		public function init(container:Sprite):void {
 			rows = new Array();
 			this.container = container;
+			
+			FrameworkEventDispatcher.getInstance().addEventListener(BanrEvent.PROCESSING_SINGLE_FINISHED, processNext);
 		}
 		
 		public function process(quality:Number, delay:Number):void {
-			for each(var r:Row in rows)
-				r.saveBanner(quality, delay);
+			this.quality = quality;
+			this.delay = delay;
+			
+			processNext(null);
+		}
+		
+		private function processNext(e:BanrEvent):void {
+			trace("processNext :: " + rows.length);
+			if(currentRow != null)
+				currentRow.finish();
+			
+			if(rows.length > 0) {
+				currentRow = rows.pop(); 	
+				currentRow.saveBanner(quality, delay);
+			} else {
+				FrameworkEventDispatcher.getInstance().dispatchEvent(new BanrEvent(BanrEvent.PROCESSING_ALL_FINISHED));
+			}
 		}
 		
 		public function addBanner(file:File):void {

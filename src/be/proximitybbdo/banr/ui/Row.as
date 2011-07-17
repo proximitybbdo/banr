@@ -24,8 +24,6 @@ package be.proximitybbdo.banr.ui {
 			
 			this.banner = banner;
 			this.addEventListener(Event.ADDED_TO_STAGE, init);
-			
-			FrameworkEventDispatcher.getInstance().addEventListener(BanrEvent.PROCESSING_FINISHED, onBannerProcessingFinished);
 		}
 		
 		private function init(e:Event):void {
@@ -35,13 +33,15 @@ package be.proximitybbdo.banr.ui {
 			setTimeout(function():void{
 				dimensions.text = banner.width + "x" + banner.height;
 			}, 500);
+			
 		}
 		
 		public function saveBanner(quality:Number, delay:Number):void {
 			banner.save(quality, delay);
 		}
 		
-		public function onBannerProcessingFinished(e:BanrEvent):void {
+		public function finish():void {
+			trace("banr finished, update ui");
 			background.gotoAndPlay("pulse");
 		}
 	}
