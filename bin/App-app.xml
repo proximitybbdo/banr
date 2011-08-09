@@ -1,7 +1,7 @@
 <?xml version ="1.0" encoding="utf-8" ?>
 <application xmlns="http://ns.adobe.com/air/application/2.0">
 	<id>proximity.bbdo.be.banr</id>
-	<version>0.1</version>
+	<version>0.1.1</version>
 	<filename>Banr</filename>
 	<description></description>
 	<!-- To localize the description, use the following format for the description element.
@@ -37,5 +37,5 @@
 	<customUpdateUI>false</customUpdateUI>
 	<allowBrowserInvocation>false</allowBrowserInvocation>
 	<icon>
-	</icon>
+	<image128x128>AppIconsForPublish/banr-128x128.png</image128x128></icon>
 <supportedProfiles>desktop extendedDesktop</supportedProfiles></application>
