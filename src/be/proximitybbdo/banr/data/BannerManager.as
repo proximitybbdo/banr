@@ -47,7 +47,6 @@ package be.proximitybbdo.banr.data {
 		}
 		
 		private function processNext(e:BanrEvent):void {
-			trace("processNext :: " + rows.length);
 			if(currentRow != null)
 				currentRow.finish();
 			
