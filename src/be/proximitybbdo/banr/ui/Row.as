@@ -34,13 +34,14 @@ package be.proximitybbdo.banr.ui {
 				dimensions.text = banner.width + "x" + banner.height;
 			}, 500);
 			
+			FrameworkEventDispatcher.getInstance().addEventListener(BanrEvent.PROCESSING_SINGLE_FINISHED, finish);
 		}
 		
 		public function saveBanner(quality:Number, delay:Number):void {
 			banner.save(quality, delay);
 		}
 		
-		public function finish():void {
+		private function finish(e:BanrEvent):void {
 			trace("banr finished, update ui");
 			background.gotoAndPlay("pulse");
 		}

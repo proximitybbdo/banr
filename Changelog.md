@@ -1,4 +1,8 @@
 
+0.1.3 / 2011-08-09 
+==================
+* [update]  changed the way the batch of files was handled
+
 0.1.2 / 2011-08-09 
 ==================
 * [update]  updated app icons

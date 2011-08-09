@@ -6,7 +6,9 @@ package be.proximitybbdo.banr.data {
 	import flash.display.Loader;
 	import flash.display.Sprite;
 	import flash.events.IOErrorEvent;
+	import flash.events.TimerEvent;
 	import flash.filesystem.File;
+	import flash.utils.Timer;
 	
 	public class BannerManager {
 		
@@ -18,6 +20,11 @@ package be.proximitybbdo.banr.data {
 		private var quality:Number;
 		private var delay:Number;
 		private var currentRow:Row = null;
+		private var timer:Timer;
+		
+		private var processedCount:Number = 0;
+		private var bannerCount:Number = 0;
+		private static const INTERVAL:Number = 100;
 		
 		private static var _instance:BannerManager;
 		
@@ -36,25 +43,35 @@ package be.proximitybbdo.banr.data {
 			rows = new Array();
 			this.container = container;
 			
-			FrameworkEventDispatcher.getInstance().addEventListener(BanrEvent.PROCESSING_SINGLE_FINISHED, processNext);
+			timer = new Timer(INTERVAL);
+			timer.addEventListener(TimerEvent.TIMER, processNext);
+			
+			FrameworkEventDispatcher.getInstance().addEventListener(BanrEvent.PROCESSING_SINGLE_FINISHED, banrProcessed);
 		}
 		
 		public function process(quality:Number, delay:Number):void {
 			this.quality = quality;
 			this.delay = delay;
 			
-			processNext(null);
+			bannerCount = rows.length;
+			
+			timer.start();
 		}
 		
-		private function processNext(e:BanrEvent):void {
-			if(currentRow != null)
-				currentRow.finish();
-			
+		private function processNext(e:TimerEvent):void {
 			if(rows.length > 0) {
 				currentRow = rows.pop(); 	
 				currentRow.saveBanner(quality, delay);
-			} else {
+			}
+		}
+		
+		private function banrProcessed(e:BanrEvent):void {
+			processedCount++;
+	
+			if(processedCount == bannerCount) {
 				FrameworkEventDispatcher.getInstance().dispatchEvent(new BanrEvent(BanrEvent.PROCESSING_ALL_FINISHED));
+				timer.stop();
+				clear();
 			}
 		}
 		
