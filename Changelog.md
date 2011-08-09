@@ -1,4 +1,8 @@
 
+0.1.2 / 2011-08-09 
+==================
+* [update]  updated app icons
+
 0.1.1 / 2011-08-09 
 ==================
 * [update]  revert `git-ignore` to allow the Flash Builder dotfiles
