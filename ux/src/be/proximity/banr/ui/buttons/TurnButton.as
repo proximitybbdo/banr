@@ -21,7 +21,8 @@ package be.proximity.banr.ui.buttons {
 		public function TurnButton() {
 			super("turnButton");		
 			//componentData.min = 0;
-			//revolutionLimitMin = 0;			
+			//revolutionLimitMin = 0;	
+			revolutionPrecision = .2;
 		}
 		
 		override protected function render():void {

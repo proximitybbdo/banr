@@ -19,7 +19,7 @@ package be.dreem.ui.components.form.buttons {
 		//private var _revolution:Number = 0;
 		private var _componentData:NumberData;
 		
-		private var _revolutionPrecision:Number = 0.2;
+		private var _revolutionPrecision:Number = 0.1;
 		
 		//private var _revolutionLimitMax:Number = 0;
 		//private var _revolutionLimitMin:Number = 1;
@@ -53,7 +53,8 @@ package be.dreem.ui.components.form.buttons {
 			
 			_componentData.value +=  (stage.mouseY - _initY) * _revolutionPrecision;
 			
-			//trace(_componentData.value);
+			//trace("( " + (stage.mouseY - _initY) * _revolutionPrecision);
+			//trace("( " + _componentData.value);
 			//nStep -= nStep % 5;
 			//trace("step "  + nStep);
 			//_componentData.value = nStep;

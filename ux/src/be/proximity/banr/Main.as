@@ -45,8 +45,6 @@ package be.proximity.banr {
 		
 		override protected function initComponent():void {
 			
-			//TweenPlugin.activate([ShortRotationPlugin]);
-			
 			lighting.mouseEnabled = false;
 			
 			addEventListener(MouseEvent.CLICK, onClick);
@@ -59,10 +57,8 @@ package be.proximity.banr {
 			
 			//map turn button data to generic filesize data
 			//turnButton.componentData = ApplicationData.getInstance().fileSize;
-			turnButton.addEventListener(ComponentInteractiveEvent.INPUT, onTurnButtonInput, false, 0, true);
-			//turnButton.componentData.addEventListener(ComponentDataEvent.UPDATE, onTurnButtonDataUpdate, false, 0, true);
-			
-		
+			//turnButton.addEventListener(ComponentInteractiveEvent.INPUT, onTurnButtonInput, false, 0, true);
+			turnButton.componentData.addEventListener(ComponentDataEvent.UPDATE, onTurnButtonDataUpdate, false, 0, true);
 			
 			_tKeyStroke = new Timer(500);
 			_tKeyStroke.addEventListener(TimerEvent.TIMER, onKeyStrokeTimer, false, 0, true);			
@@ -71,13 +67,16 @@ package be.proximity.banr {
 		}
 		
 		private function onTurnButtonDataUpdate(e:ComponentDataEvent):void {
-			//trace(": " + turnButton.componentData.increment);
-			ApplicationData.getInstance().fileSize.value += Math.round(turnButton.componentData.increment) * 5;
+			//trace(":> " + turnButton.componentData.increment);
+			ApplicationData.getInstance().fileSize.steps = 5;
+			ApplicationData.getInstance().fileSize.value += turnButton.componentData.increment;
+			ApplicationData.getInstance().fileSize.steps = 1;
 			
+			//ApplicationData.getInstance().fileSize.value = ApplicationData.getInstance().fileSize.value - ApplicationData.getInstance().fileSize.value % 5 + Math.round(turnButton.componentData.increment * 5);
 		}
 		
 		private function onFileSizeUpdate(e:ComponentDataEvent):void {
-			trace("onFileSizeUpdate " +  (ApplicationData.getInstance().fileSize.value / 5));
+			//trace("onFileSizeUpdate " +  (ApplicationData.getInstance().fileSize.value / 5));
 			dd.data = ApplicationData.getInstance().fileSize.valueStep;
 			//turnButton.componentData.value = (ApplicationData.getInstance().fileSize.value / 5);
 		}

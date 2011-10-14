@@ -17,7 +17,7 @@ package be.dreem.ui.components.form.data {
 		private var _max:Number = 0;
 		private var _min:Number = 0;
 		
-		private var _steps:Number = 5;
+		private var _steps:Number = 1;
 		
 		private var _round:Boolean = false;
 		
@@ -25,7 +25,8 @@ package be.dreem.ui.components.form.data {
 			_n = initialValue;			
 		}		
 		
-		public function get value():Number { 			
+		public function get value():Number { 	
+			
 			return _n;
 		}		
 		
@@ -36,10 +37,12 @@ package be.dreem.ui.components.form.data {
 			
 			if(_minEnabled)
 				n = (_min < n) ? n : _min;
-				
-			if (_steps)
-				n -= n % _steps;
 			
+			///*
+			//if (_steps)
+				//n -= n % _steps;
+			//*/
+				
 			if (_n == n) return;
 			
 			_nPrevious = _n;
@@ -114,6 +117,7 @@ package be.dreem.ui.components.form.data {
 		}
 		
 		public function get increment():Number {
+			trace(_n + " - " + _nPrevious);
 			return _n - _nPrevious;
 		}
 		//*/
