@@ -117,7 +117,7 @@ package be.dreem.ui.components.form.data {
 		}
 		
 		public function get increment():Number {
-			trace(_n + " - " + _nPrevious);
+			//trace(_n + " - " + _nPrevious);
 			return _n - _nPrevious;
 		}
 		//*/

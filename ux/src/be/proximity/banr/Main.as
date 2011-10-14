@@ -40,7 +40,7 @@ package be.proximity.banr {
 		public function Main():void {
 			super("main");
 			
-			_si = new SwfImaging(5);
+			_si = new SwfImaging(50);
 		}
 		
 		override protected function initComponent():void {
@@ -109,7 +109,7 @@ package be.proximity.banr {
 		private function onTurnButtonInput(e:ComponentInteractiveEvent):void {
 			//dd.displayNumber(Math.random() * 9);
 			//turning button feeds generic filesize
-			trace(": " + turnButton.componentData.increment + " " + ApplicationData.getInstance().fileSize.value);
+			//trace(": " + turnButton.componentData.increment + " " + ApplicationData.getInstance().fileSize.value);
 			//ApplicationData.getInstance().fileSize.value = Math.round(turnButton.componentData.value * 10) * 5;
 			//trace("> " + ApplicationData.getInstance().fileSize.value);
 			//dd.displayNumber(Math.round(turnButton.revolutionRatio *  9));

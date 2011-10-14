@@ -14,7 +14,7 @@ package be.proximity.banr.ui.buttons {
 	public class TurnButton extends AbstractRevolutionButton {
 		
 		public var turn:Sprite;
-		private var _turnSpeed:Number = 20;
+		private var _turnSpeed:Number = 5;
 		
 		public var _tweenRotation:Number = 0;
 		

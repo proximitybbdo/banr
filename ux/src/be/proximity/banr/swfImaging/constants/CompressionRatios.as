@@ -218,7 +218,7 @@ package be.proximity.banr.swfImaging.constants {
 			
 		}
 		
-		public static function getQualityByCompression(compressionRatio:Number, saveMargin:Number = .9):Number {
+		public static function getQualityByCompression(compressionRatio:Number, saveMargin:Number = .8):Number {
 			
 			for (var i:int = 0; i < _jpgCompressionTable.length; i++) {
 				//trace("q = " + i + " " + compressionRatio +" < " + _jpgCompressionTable[i]);

@@ -24,8 +24,11 @@ package be.proximity.banr.swfImaging.data {
 		
 		private var _loader:Loader;
 		private var _loaded:Boolean = false;
-		private var _imaged:Boolean = false;
+		//private var _imaged:Boolean = false;
 		private var _image:BitmapData;
+		
+		private var _isProcessing:Boolean = false;
+		private var _isProcessed:Boolean = false;
 		
 		private var _t:Timer;
 		
@@ -36,9 +39,12 @@ package be.proximity.banr.swfImaging.data {
 			_bgColor = pBgColor;			
 		}
 		
-		
 		public function process():void {
 			reset();
+			_isProcessing = true;
+			_isProcessed = false;
+			//_imaged = false;
+			
 			//trace("ImagingRequest.process() " + _file.url);
 			_loader = new Loader();
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete, false, 0, true);
@@ -49,14 +55,18 @@ package be.proximity.banr.swfImaging.data {
 		
 		private function onIOError(e:IOErrorEvent):void {
 			//trace("ImagingRequest.onIOError()");
-			dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.LOAD_FAILED));
+			_isProcessing = false;
+			
+			//dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.LOAD_FAILED));
+			
+			
 		}
 		
 		private function onLoadComplete(e:Event):void {
 			_loaded = true;
 			
 			//trace("ImagingRequest.onLoadComplete() ");
-			dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.LOAD_COMPLETE));
+			//dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.LOAD_COMPLETE));
 			
 			_t = new Timer(_timing * 1000);
 			_t.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
@@ -74,8 +84,11 @@ package be.proximity.banr.swfImaging.data {
 			_image = new BitmapData(_loader.contentLoaderInfo.width, _loader.contentLoaderInfo.height, false, _bgColor);
 			_image.draw(_loader.contentLoaderInfo.content);
 			
-			_imaged = true;
-			dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.IMAGING_COMPLETE));
+			//_imaged = true;
+			_isProcessing = false;
+			_isProcessed = true;
+			//dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.IMAGING_COMPLETE));
+			dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.PROCESSING_COMPLETE));
 		}
 		
 		public function get isLoaded():Boolean {
@@ -96,6 +109,14 @@ package be.proximity.banr.swfImaging.data {
 		
 		public function get fileSize():uint {
 			return _fileSize;
+		}
+		
+		public function get isProcessing():Boolean {
+			return _isProcessing;
+		}
+		
+		public function get isProcessed():Boolean {
+			return _isProcessed;
 		}
 		
 		private function reset():void {
