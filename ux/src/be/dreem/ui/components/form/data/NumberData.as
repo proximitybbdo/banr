@@ -9,14 +9,15 @@ package be.dreem.ui.components.form.data {
 		/**
 		 * the ratio (0 > 1) (abstract ratio that can represents the progress of a progressbar, the postion of a scrollbar, etc.)
 		 */
-		private var _n:Number;
+		private var _n:Number = 0;
+		private var _nPrevious:Number = 0;
 		
 		private var _maxEnabled:Boolean = false;
 		private var _minEnabled:Boolean = false;
 		private var _max:Number = 0;
 		private var _min:Number = 0;
 		
-		private var _steps:Number = 0;
+		private var _steps:Number = 5;
 		
 		private var _round:Boolean = false;
 		
@@ -41,15 +42,16 @@ package be.dreem.ui.components.form.data {
 			
 			if (_n == n) return;
 			
+			_nPrevious = _n;
 			_n = n;
 			
 			dispatchEvent(new ComponentDataEvent(ComponentDataEvent.UPDATE));
 		}
-		/*
+		///*
 		public function get valueStep():Number {
 			return _n - _n % _steps;
 		}
-		*/
+		//*/
 		
 		public function get max():Number {
 			return _max;
@@ -109,6 +111,10 @@ package be.dreem.ui.components.form.data {
 		
 		public function set steps(value:Number):void {
 			_steps = value;
+		}
+		
+		public function get increment():Number {
+			return _n - _nPrevious;
 		}
 		//*/
 	}

@@ -20,15 +20,15 @@ package be.proximity.banr.ui.buttons {
 		
 		public function TurnButton() {
 			super("turnButton");		
-			componentData.min = 0;
+			//componentData.min = 0;
 			//revolutionLimitMin = 0;			
 		}
 		
 		override protected function render():void {
 			if(mouseHoldsOn)
 				turn.rotation =  componentData.value * _turnSpeed;	
-			else
-				TweenLite.to(this, .6, {delay:0.2, ease:Cubic.easeOut, _tweenRotation:componentData.value * _turnSpeed, onUpdate:onRotationUpdate} );
+			//else
+				//TweenLite.to(this, .6, {delay:0.2, ease:Cubic.easeOut, _tweenRotation:componentData.increment * _turnSpeed, onUpdate:onRotationUpdate} );
 				
 		}
 		

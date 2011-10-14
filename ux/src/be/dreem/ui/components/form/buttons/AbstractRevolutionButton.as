@@ -19,7 +19,7 @@ package be.dreem.ui.components.form.buttons {
 		//private var _revolution:Number = 0;
 		private var _componentData:NumberData;
 		
-		private var _revolutionPrecision:Number = 0.05;
+		private var _revolutionPrecision:Number = 0.2;
 		
 		//private var _revolutionLimitMax:Number = 0;
 		//private var _revolutionLimitMin:Number = 1;

@@ -67,19 +67,19 @@ package be.proximity.banr {
 			_tKeyStroke = new Timer(500);
 			_tKeyStroke.addEventListener(TimerEvent.TIMER, onKeyStrokeTimer, false, 0, true);			
 			
-			
 			onFileSizeUpdate(null);
 		}
 		
 		private function onTurnButtonDataUpdate(e:ComponentDataEvent):void {
-			ApplicationData.getInstance().fileSize.value = Math.round(turnButton.componentData.value) * 5;
+			//trace(": " + turnButton.componentData.increment);
+			ApplicationData.getInstance().fileSize.value += Math.round(turnButton.componentData.increment) * 5;
 			
 		}
 		
 		private function onFileSizeUpdate(e:ComponentDataEvent):void {
-			trace("onFileSizeUpdate");
-			dd.data = ApplicationData.getInstance().fileSize.value;
-			turnButton.componentData.value = ApplicationData.getInstance().fileSize.value / 5;
+			trace("onFileSizeUpdate " +  (ApplicationData.getInstance().fileSize.value / 5));
+			dd.data = ApplicationData.getInstance().fileSize.valueStep;
+			//turnButton.componentData.value = (ApplicationData.getInstance().fileSize.value / 5);
 		}
 		
 		private function onKeyStrokeTimer(e:TimerEvent):void {
@@ -110,11 +110,12 @@ package be.proximity.banr {
 		private function onTurnButtonInput(e:ComponentInteractiveEvent):void {
 			//dd.displayNumber(Math.random() * 9);
 			//turning button feeds generic filesize
-			
+			trace(": " + turnButton.componentData.increment + " " + ApplicationData.getInstance().fileSize.value);
 			//ApplicationData.getInstance().fileSize.value = Math.round(turnButton.componentData.value * 10) * 5;
 			//trace("> " + ApplicationData.getInstance().fileSize.value);
 			//dd.displayNumber(Math.round(turnButton.revolutionRatio *  9));
-			ApplicationData.getInstance().fileSize.value = Math.round(turnButton.componentData.value) * 5;
+			//ApplicationData.getInstance().fileSize.value = Math.round(turnButton.componentData.value) * 5;
+			ApplicationData.getInstance().fileSize.value += Math.round(turnButton.componentData.increment) * 5;
 		}
 		//*/
 		
@@ -133,7 +134,7 @@ package be.proximity.banr {
 			var files:Object = e.clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT);
 			///*
 			for each (var file:File in files) {
-				_si.add(file, ApplicationData.getInstance().fileSize.value, ApplicationData.getInstance().timing.value);
+				_si.add(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value);
 			}
 			//*/
 			
