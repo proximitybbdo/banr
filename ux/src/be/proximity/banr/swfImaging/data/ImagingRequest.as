@@ -64,16 +64,10 @@ package be.proximity.banr.swfImaging.data {
 		private function onLoadComplete(e:Event):void {
 			_loaded = true;
 			
-			//trace("ImagingRequest.onLoadComplete() ");
-			//dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.LOAD_COMPLETE));
 			
 			_currentFrame = 0;
 			_sp = new Sprite();
 			_sp.addEventListener(Event.ENTER_FRAME, onSpEnterFrame, false, 0, true);
-			
-			//_t = new Timer(_timing * 1000);
-			//_t.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
-			//_t.start();
 		}
 		
 		private function onContentEnterFrame(e:Event):void {
