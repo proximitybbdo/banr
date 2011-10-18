@@ -85,7 +85,19 @@ package be.proximity.banr.ui.digitDisplay {
 				break;
 				
 				case "C" :
+					s = "1456";
+				break;
+				
+				case "E" :
 					s = "14567";
+				break;
+				
+				case "_" :
+					s = "4";
+				break;
+				
+				case "-" :
+					s = "7";
 				break;
 				
 			}

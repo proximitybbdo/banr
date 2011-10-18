@@ -21,8 +21,9 @@ package be.proximity.banr.ui.digitDisplay {
 			if (data) {
 				var s:String = int(data).toString();
 				
+				
 				while (s.length < 3)
-					s = "0" + s;
+					s = "_" + s;
 				
 				d1.displayCharacter(s.substr(0, 1));
 				d2.displayCharacter(s.substr(1, 1));

@@ -71,6 +71,7 @@ package be.proximity.banr.swfImaging {
 			}			
 		}
 		
+		/*
 		public function add(swf:File, targetSize:int = 40, timing:int = 15):ImagingRequest {			
 			if (swf.extension.toLowerCase() == "swf") {				
 				return addToQueue(new ImagingRequest(swf, targetSize, timing));
@@ -79,18 +80,24 @@ package be.proximity.banr.swfImaging {
 				return null;
 			}
 		}
+		*/
 		
-		private function addToQueue(r:ImagingRequest):ImagingRequest {
-			//trace("SwfImaging: addToQueue()");
-			_qInput.push(r);	
+		public function add(r:ImagingRequest):ImagingRequest {
 			
-			_totalToProcess = _qInput.length + _qProcess.length;
-			updateProgress();
+			if(r)
+				if (r.file.extension.toLowerCase() == FileExtensions.JPG) {			
+					
+					_qInput.push(r);	
+				
+					_totalToProcess = _qInput.length + _qProcess.length;
+					updateProgress();
+					
+					if (!_tBuffer.running) {
+						fillProcessQueue();
+						_tBuffer.start();
+					}
+				}
 			
-			if (!_tBuffer.running) {
-				fillProcessQueue();
-				_tBuffer.start();
-			}
 			
 			return r;
 		}

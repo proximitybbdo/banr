@@ -21,9 +21,10 @@ package be.proximity.banr.swfImaging.data {
 		private var _file:File;
 		private var _timing:uint;
 		private var _fileSize:uint;
+		private var _exportExtentions:Array;
 		private var _bgColor:uint;
 		
-		private var _loader:Loader;
+		private var _l:Loader;
 		private var _loaded:Boolean = false;
 		//private var _imaged:Boolean = false;
 		private var _image:BitmapData;
@@ -35,25 +36,35 @@ package be.proximity.banr.swfImaging.data {
 		private var _sp:Sprite;
 		private var _currentFrame:int;
 		
-		public function ImagingRequest(pFile:File, pFileSize:uint, pTiming:uint, pBgColor:uint = 0xFF0000) {
+		/**
+		 * 
+		 * @param	pFile	swf file
+		 * @param	pFileSize	target filesize in kB
+		 * @param	pTiming	target timing in seconds
+		 * @param	pExportExtentions	Array of supported extentions to export to (ex. [".jpg",".gif"]
+		 * @param	pBgColor	background color if swf is transparent
+		 */
+		public function ImagingRequest(pFile:File, pFileSize:uint, pTiming:uint, pExportExtentions:Array, pBgColor:uint = 0xFF0000) {
 			_file = pFile;
 			_timing = pTiming;
 			_fileSize = pFileSize;			
 			_bgColor = pBgColor;	
+			_exportExtentions = pExportExtentions;
 			
 			_sp = new Sprite();
 		}
 		
 		public function process():void {
 			reset();
+			
 			_isProcessing = true;
 			_isProcessed = false;
 			
-			_loader = new Loader();
-			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete, false, 0, true);
-			_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onIOError, false, 0, true);
+			_l = new Loader();
+			_l.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete, false, 0, true);
+			_l.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onIOError, false, 0, true);
 			
-			_loader.load(new URLRequest(_file.url));
+			_l.load(new URLRequest(_file.url));
 		}
 		
 		private function onIOError(e:IOErrorEvent):void {
@@ -64,39 +75,26 @@ package be.proximity.banr.swfImaging.data {
 		private function onLoadComplete(e:Event):void {
 			_loaded = true;
 			
-			
 			_currentFrame = 0;
 			_sp = new Sprite();
 			_sp.addEventListener(Event.ENTER_FRAME, onSpEnterFrame, false, 0, true);
-		}
-		
-		private function onContentEnterFrame(e:Event):void {
-			//trace("C");
 		}
 		
 		private function onSpEnterFrame(e:Event):void {
 			_currentFrame++;
 			
 			//trace("onSpEnterFrame");
-			if (_currentFrame > _timing * _loader.contentLoaderInfo.frameRate) {
+			if (_currentFrame > _timing * _l.contentLoaderInfo.frameRate) {
 				_sp.removeEventListener(Event.ENTER_FRAME, onSpEnterFrame, false);
 				createImage();
 			}
 		}
 		
-		/*
-		private function onTimer(e:TimerEvent):void {
-			_t.stop();
-			_t.removeEventListener(TimerEvent.TIMER, onTimer);
-			createImage();
-		}
-		*/
-		
 		private function createImage():void {
 			
 			//trace("ImagingRequest.createImage()");
-			_image = new BitmapData(_loader.contentLoaderInfo.width, _loader.contentLoaderInfo.height, false, _bgColor);
-			_image.draw(_loader.contentLoaderInfo.content);
+			_image = new BitmapData(_l.contentLoaderInfo.width, _l.contentLoaderInfo.height, false, _bgColor);
+			_image.draw(_l.contentLoaderInfo.content);
 			
 			//_imaged = true;
 			_isProcessing = false;
@@ -133,24 +131,22 @@ package be.proximity.banr.swfImaging.data {
 			return _isProcessed;
 		}
 		
+		public function get exportExtentions():Array {
+			return _exportExtentions;
+		}
+		
 		private function reset():void {
-			if (_loader) {
-				_loader.removeEventListener(Event.COMPLETE, onLoadComplete);
-				_loader.removeEventListener(IOErrorEvent.IO_ERROR, onIOError);
+			if (_l) {
+				_l.removeEventListener(Event.COMPLETE, onLoadComplete);
+				_l.removeEventListener(IOErrorEvent.IO_ERROR, onIOError);
 			}
-			/*
-			if (_t) {
-				_t.stop();
-				_t.removeEventListener(TimerEvent.TIMER, onTimer);
-			}
-			*/
+			
 			if (_sp) {
 				_sp.removeEventListener(Event.ENTER_FRAME, onSpEnterFrame, false);
 			}
 			
-			_loader = null;
-			_image = null;
-			//_t = null;	
+			_l = null;
+			_image = null;	
 			_sp = null;	
 		}
 		

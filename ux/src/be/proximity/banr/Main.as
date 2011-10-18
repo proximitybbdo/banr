@@ -4,8 +4,8 @@ package be.proximity.banr {
 	import be.dreem.ui.components.form.events.ComponentDataEvent;
 	import be.dreem.ui.components.form.events.ComponentInteractiveEvent;
 	import be.proximity.banr.applicationData.ApplicationData;
-	import be.proximity.banr.applicationData.events.ApplicationDataEvent;
 	import be.proximity.banr.swfImaging.*;
+	import be.proximity.banr.swfImaging.constants.FileExtensions;
 	import be.proximity.banr.swfImaging.data.ImagingRequest;
 	import be.proximity.banr.swfImaging.events.ImagingRequestEvent;
 	import be.proximity.banr.swfImaging.events.SwfImagingEvent;
@@ -41,6 +41,7 @@ package be.proximity.banr {
 		
 		private var _tKeyStroke:Timer;
 		private var _sKeyStroke:String = "";
+		private var FileExtentions;
 		
 		
 		
@@ -141,9 +142,8 @@ package be.proximity.banr {
 			var files:Object = e.clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT);
 			///*
 			//trace(typeof(files));
-			for each (var f:File in files) {
+			for each (var f:File in files)
 				addFiles(f);
-			}
 		}
 		
 		private function addFiles(file:File):void {
@@ -151,7 +151,8 @@ package be.proximity.banr {
 				for each (var f:File in file.getDirectoryListing())
 					addFiles(f);
 			}else {
-				_si.add(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value);
+				//_si.add(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value);
+				_si.add(new ImagingRequest(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value, [FileExtensions.JPG]));
 			}
 		}
 	}

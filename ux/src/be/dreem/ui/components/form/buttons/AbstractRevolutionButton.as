@@ -14,7 +14,7 @@ package be.dreem.ui.components.form.buttons {
 	public class AbstractRevolutionButton extends AbstractPushButton {
 		
 		/**
-		 * The ammount of revolutions the knop made, if 1, the button has made one complete revolution
+		 * The ammount of revolutions the button made, if 1, the button has made one complete revolution
 		 */
 		//private var _revolution:Number = 0;
 		private var _componentData:NumberData;
