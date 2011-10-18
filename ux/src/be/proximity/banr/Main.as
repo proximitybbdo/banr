@@ -15,6 +15,7 @@ package be.proximity.banr {
 	import com.greensock.plugins.ShortRotationPlugin;
 	import com.greensock.plugins.TweenPlugin;
 	import flash.display.Bitmap;
+	import flash.net.SharedObject;
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	
@@ -40,6 +41,8 @@ package be.proximity.banr {
 		
 		private var _tKeyStroke:Timer;
 		private var _sKeyStroke:String = "";
+		
+		
 		
 		public function Main():void {
 			super("main");			
@@ -67,6 +70,8 @@ package be.proximity.banr {
 			_tKeyStroke.addEventListener(TimerEvent.TIMER, onKeyStrokeTimer, false, 0, true);			
 			
 			onFileSizeUpdate(null);
+			
+			
 		}
 		
 		private function onSwfImagingProgress(e:SwfImagingEvent):void {
@@ -93,8 +98,8 @@ package be.proximity.banr {
 		
 		private function onFileSizeUpdate(e:ComponentDataEvent):void {
 			//trace("onFileSizeUpdate " +  (ApplicationData.getInstance().fileSize.value / 5));
-			dd.data = ApplicationData.getInstance().fileSize.valueStep;
-			//turnButton.componentData.value = (ApplicationData.getInstance().fileSize.value / 5);
+			 dd.data = ApplicationData.getInstance().fileSize.valueStep;
+			 
 		}
 		
 		private function onKeyStrokeTimer(e:TimerEvent):void {

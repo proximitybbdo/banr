@@ -1,7 +1,9 @@
 package be.proximity.banr.applicationData {
 	import be.dreem.ui.components.form.data.NumberData;
+	import be.dreem.ui.components.form.events.ComponentDataEvent;
 	import be.proximity.banr.applicationData.events.ApplicationDataEvent;
 	import flash.events.EventDispatcher;
+	import flash.net.SharedObject;
 
 	/**
 	 * ...
@@ -12,6 +14,8 @@ package be.proximity.banr.applicationData {
 		public var fileSize:NumberData;
 		public var timing:NumberData;
 		//private var _timing:uint = 15 * 1.2;
+		
+		private var _so:SharedObject;
 		
 		public static const FILESIZE_MIN:uint = 5;
 		
@@ -42,6 +46,21 @@ package be.proximity.banr.applicationData {
 			timing = new NumberData(15);
 			timing.min = 1;
 			timing.max = 666;
+			
+			
+			_so = SharedObject.getLocal("banr");
+			
+			///*
+			if (_so.data.fileSize != null) {
+				fileSize.value = _so.data.fileSize;
+			}
+			
+			fileSize.addEventListener(ComponentDataEvent.UPDATE, onFileSizeUpdate, false, 0, true);
+		}
+		
+		private function onFileSizeUpdate(e:ComponentDataEvent):void {
+			if (_so)
+				_so.data.fileSize = fileSize.value;
 		}
 		
 		

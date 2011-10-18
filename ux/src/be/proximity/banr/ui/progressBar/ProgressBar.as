@@ -61,7 +61,6 @@ package be.proximity.banr.ui.progressBar {
 		}
 		
 		private function renderBar():void {
-				
 			
 			container.graphics.clear();
 			container.graphics.beginBitmapFill(_bd, new Matrix(1, 0, 0, 1, _scroll, 0), true, true);
