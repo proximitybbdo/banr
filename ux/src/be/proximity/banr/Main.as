@@ -7,8 +7,10 @@ package be.proximity.banr {
 	import be.proximity.banr.swfImaging.*;
 	import be.proximity.banr.swfImaging.data.ImagingRequest;
 	import be.proximity.banr.swfImaging.events.ImagingRequestEvent;
+	import be.proximity.banr.swfImaging.events.SwfImagingEvent;
 	import be.proximity.banr.ui.buttons.TurnButton;
 	import be.proximity.banr.ui.digitDisplay.*;
+	import be.proximity.banr.ui.progressBar.ProgressBar;
 	import com.greensock.plugins.ShortRotationPlugin;
 	import com.greensock.plugins.TweenPlugin;
 	import flash.display.Bitmap;
@@ -29,6 +31,7 @@ package be.proximity.banr {
 		public var lighting:Sprite;
 		public var dd:DigitDisplay;
 		public var turnButton:TurnButton;
+		public var progressBar:ProgressBar;
 		
 		private var _si:SwfImaging;
 		
@@ -40,12 +43,21 @@ package be.proximity.banr {
 		public function Main():void {
 			super("main");
 			
-			_si = new SwfImaging(50);
+			
+			
+		}
+		
+		private function onSwfImagingProgress(e:SwfImagingEvent):void {
+			trace(_si.progress);
+			progressBar.data = _si.progress;
 		}
 		
 		override protected function initComponent():void {
 			
 			lighting.mouseEnabled = false;
+			
+			_si = new SwfImaging(20);
+			_si.addEventListener(SwfImagingEvent.PROGRESS, onSwfImagingProgress, false, 0, true);
 			
 			addEventListener(MouseEvent.CLICK, onClick);
 			

@@ -39,7 +39,7 @@ package be.proximity.banr.applicationData {
 			fileSize.min = 5;
 			fileSize.max = 999;
 			
-			timing = new NumberData(5);
+			timing = new NumberData(6);
 			timing.min = 1;
 			timing.max = 666;
 		}

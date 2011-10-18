@@ -43,9 +43,7 @@ package be.proximity.banr.swfImaging.data {
 			reset();
 			_isProcessing = true;
 			_isProcessed = false;
-			//_imaged = false;
 			
-			//trace("ImagingRequest.process() " + _file.url);
 			_loader = new Loader();
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete, false, 0, true);
 			_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onIOError, false, 0, true);
@@ -54,12 +52,8 @@ package be.proximity.banr.swfImaging.data {
 		}
 		
 		private function onIOError(e:IOErrorEvent):void {
-			//trace("ImagingRequest.onIOError()");
-			_isProcessing = false;
-			
-			//dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.LOAD_FAILED));
-			
-			
+			_isProcessing = false;			
+			dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.PROCESSING_FAILED));			
 		}
 		
 		private function onLoadComplete(e:Event):void {

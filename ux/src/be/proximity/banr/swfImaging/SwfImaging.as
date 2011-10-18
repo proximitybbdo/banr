@@ -3,6 +3,7 @@ package be.proximity.banr.swfImaging {
 	import be.proximity.banr.swfImaging.constants.FileExtensions;
 	import be.proximity.banr.swfImaging.data.ImagingRequest;
 	import be.proximity.banr.swfImaging.events.ImagingRequestEvent;
+	import be.proximity.banr.swfImaging.events.SwfImagingEvent;
 	import be.proximity.banr.swfImaging.imageEncoder.ImageEncoder;
 	import com.adobe.images.JPGEncoder;
 	import com.adobe.images.PNGEncoder;
@@ -33,6 +34,9 @@ package be.proximity.banr.swfImaging {
 		private var _tEncoder:Timer;
 		private var _encodingStart:Date;
 		
+		private var _totalToProcess:int = 0;
+		private var _progress:Number = 0;
+		
 		public function SwfImaging(pProcessBuffer:uint = 3) {
 			
 			_processBuffer = pProcessBuffer;
@@ -40,8 +44,9 @@ package be.proximity.banr.swfImaging {
 			_qInput = new Array();
 			_qProcess = new Array();
 			
-			_t = new Timer(1000);
-			_t.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
+			//_t = new Timer(500);
+			//_t.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
+			//_t.start();
 			
 			_tBuffer = new Timer(1000);
 			_tBuffer.addEventListener(TimerEvent.TIMER, onBufferTimer, false, 0, true);
@@ -54,8 +59,16 @@ package be.proximity.banr.swfImaging {
 			encodeNext();
 		}
 		
-		private function onTimer(e:TimerEvent):void {
-			updateProgress();
+		//private function onTimer(e:TimerEvent):void {
+			//updateProgress();
+		//}
+		
+		private function updateProgress():void {
+			
+			if (_totalToProcess) {
+				_progress = (_qInput.length + _qProcess.length) / _totalToProcess;			
+				dispatchEvent(new SwfImagingEvent(SwfImagingEvent.PROGRESS));
+			}			
 		}
 		
 		public function add(swf:File, targetSize:int = 40, timing:int = 15):ImagingRequest {			
@@ -71,6 +84,9 @@ package be.proximity.banr.swfImaging {
 			//trace("SwfImaging: addToQueue()");
 			_qInput.push(r);	
 			
+			_totalToProcess = _qInput.length + _qProcess.length;
+			updateProgress();
+			
 			if (!_tBuffer.running) {
 				fillProcessQueue();
 				_tBuffer.start();
@@ -80,7 +96,7 @@ package be.proximity.banr.swfImaging {
 		}
 		
 		private function onBufferTimer(e:TimerEvent):void {
-			trace("onBufferTimer()");
+			//trace("onBufferTimer()");
 			fillProcessQueue();
 			
 			if (! _qInput.length)
@@ -89,7 +105,7 @@ package be.proximity.banr.swfImaging {
 		
 		private function fillProcessQueue():void {
 			//var b:Boolean = false;
-			trace("fillProcessQueue() " + _qProcess.length);
+			
 			
 			if (_qProcess.length < _processBuffer && _qInput.length) {				
 				addToProcessQueue(_qInput.shift() as ImagingRequest);
@@ -99,11 +115,13 @@ package be.proximity.banr.swfImaging {
 				
 			}
 			
+			trace("SwfImaging, fillProcessQueue() " + _qProcess.length);
+			
 			//return b;
 		}
 		
 		private function addToProcessQueue(r:ImagingRequest):void {			
-			trace("addToProcessQueue()");
+			//trace("addToProcessQueue()");
 			_qProcess.push(r);
 			r.addEventListener(ImagingRequestEvent.PROCESSING_COMPLETE, onRequestProcessingComplete, false, 0, true);
 			r.process();
@@ -134,7 +152,7 @@ package be.proximity.banr.swfImaging {
 		}
 		
 		private function onRequestProcessingComplete(e:ImagingRequestEvent):void {
-			trace("SwfImaging, onImagingComplete()")			
+			//trace("SwfImaging, onImagingComplete()")			
 			
 			var r:ImagingRequest = e.currentTarget as ImagingRequest;
 			
@@ -157,7 +175,7 @@ package be.proximity.banr.swfImaging {
 		///*
 		///*
 		private function startEncoding():void {
-			trace("SwfImaging, startEncoding()");
+			//trace("SwfImaging, startEncoding()");
 			if (!_tEncoder.running) {
 				_tEncoder.reset();
 				_tEncoder.start();
@@ -166,13 +184,13 @@ package be.proximity.banr.swfImaging {
 		//*/
 		
 		private function stopEncoding():void {
-			trace("SwfImaging, stopEncoding()");
+			//trace("SwfImaging, stopEncoding()");
 			//_tEncoder.reset();
 			_tEncoder.stop();
 		}
 		
 		private function encodeNext():void {
-			trace("SwfImaging, encodeNext()");			
+			//trace("SwfImaging, encodeNext()");			
 		
 			if (_qProcess.length) {
 				
@@ -188,14 +206,15 @@ package be.proximity.banr.swfImaging {
 				}
 				
 				if (r) {
-					trace("encoding...");
+					//trace("encoding...");
 					save(r, encode(r), FileExtensions.JPG);	
 					r.destroy();
+					updateProgress();
 				}else {
-					trace("buffer " + _qProcess + ", none ready");
+					trace("SwfImaging, buffer " + _qProcess.length + ", none ready");
 				}
 				
-				_tEncoder.reset();
+				//_tEncoder.reset();
 				_tEncoder.start();
 				
 			}else {
@@ -204,18 +223,28 @@ package be.proximity.banr.swfImaging {
 		}
 		
 		private function encode(r:ImagingRequest):ByteArray {
-			trace("SwfImaging, encode()")
+			//trace("SwfImaging, encode()")
 			//_encodingStart = new Date();
 			
 			var targetQuality:Number = 100;
 			var e:JPGEncoder = new JPGEncoder(targetQuality);
 			var b:ByteArray = e.encode(r.image);
 			
+			/*
+			trace("dimensions: " + r.image.width + " " + r.image.height);
+			targetQuality++;
+			while (targetQuality --) {
+				b = new JPGEncoder(targetQuality).encode(r.image)
+				trace(Number(b.length));
+			}
+			//*/
+			///*
 			if (b.length / 1024 > r.fileSize) {
 				targetQuality = CompressionRatios.getQualityByCompression(r.fileSize / (b.length / 1024));			
 				e = new JPGEncoder(targetQuality);
 				b = e.encode(r.image);
 			}
+			//*/
 			
 			trace("SwfImaging, encoded("+targetQuality+"), target:" + r.fileSize + " vs result:" + Number(b.length / 1024).toPrecision(4));
 			
@@ -247,6 +276,13 @@ package be.proximity.banr.swfImaging {
 		
 		public function set processBuffer(value:int):void {
 			_processBuffer = value;
+		}
+		
+		/**
+		 * Ratio from 1 to 0 stating the progress of the processing
+		 */
+		public function get progress():Number {
+			return _progress;
 		}
 		
 	}
