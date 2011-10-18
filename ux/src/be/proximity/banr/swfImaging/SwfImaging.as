@@ -48,10 +48,10 @@ package be.proximity.banr.swfImaging {
 			//_t.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
 			//_t.start();
 			
-			_tBuffer = new Timer(1000);
+			_tBuffer = new Timer(500);
 			_tBuffer.addEventListener(TimerEvent.TIMER, onBufferTimer, false, 0, true);
 			
-			_tEncoder = new Timer(200);
+			_tEncoder = new Timer(250);
 			_tEncoder.addEventListener(TimerEvent.TIMER, onEncoderTimer, false, 0, true);
 		}
 		
@@ -75,7 +75,7 @@ package be.proximity.banr.swfImaging {
 			if (swf.extension.toLowerCase() == "swf") {				
 				return addToQueue(new ImagingRequest(swf, targetSize, timing));
 			} else {
-				throw new Error("SwfImaging.add(), files must be of the *.swf format");
+				//throw new Error("SwfImaging.add(), files must be of the *.swf format");
 				return null;
 			}
 		}
@@ -104,20 +104,11 @@ package be.proximity.banr.swfImaging {
 		}
 		
 		private function fillProcessQueue():void {
-			//var b:Boolean = false;
 			
-			
-			if (_qProcess.length < _processBuffer && _qInput.length) {				
+			if (_qProcess.length < _processBuffer && _qInput.length)			
 				addToProcessQueue(_qInput.shift() as ImagingRequest);
-				
-				//b = true;
-			}else {
-				
-			}
 			
 			trace("SwfImaging, fillProcessQueue() " + _qProcess.length);
-			
-			//return b;
 		}
 		
 		private function addToProcessQueue(r:ImagingRequest):void {			
@@ -130,7 +121,6 @@ package be.proximity.banr.swfImaging {
 		///*
 		private function removeFromProcessQueue(r:ImagingRequest):ImagingRequest {
 			
-			//trace("LO");
 			for (var i:int = 0; i < _qProcess.length; i++) {
 				if (ImagingRequest(_qProcess[i]) == r) {
 					return _qProcess.splice(i, 1)[0];
@@ -151,29 +141,16 @@ package be.proximity.banr.swfImaging {
 			return r;
 		}
 		
-		private function onRequestProcessingComplete(e:ImagingRequestEvent):void {
-			//trace("SwfImaging, onImagingComplete()")			
+		private function onRequestProcessingComplete(e:ImagingRequestEvent):void {	
 			
 			var r:ImagingRequest = e.currentTarget as ImagingRequest;
 			
 			r.removeEventListener(ImagingRequestEvent.PROCESSING_COMPLETE, onRequestProcessingComplete);
 			
-			/*
-			
-			var b:ByteArray = encode(r);			
-			//new ImageEncoder(
-			save(r, b, FileExtensions.JPG);			
-			
-			removeFromProcessQueue(r).destroy();
-			//fillProcessQueue();
-			//*/
-			
-			//encodeNext();
 			
 			startEncoding();
-		}		
-		///*
-		///*
+		}	
+		
 		private function startEncoding():void {
 			//trace("SwfImaging, startEncoding()");
 			if (!_tEncoder.running) {
@@ -181,11 +158,9 @@ package be.proximity.banr.swfImaging {
 				_tEncoder.start();
 			}
 		}
-		//*/
 		
 		private function stopEncoding():void {
-			//trace("SwfImaging, stopEncoding()");
-			//_tEncoder.reset();
+			trace("SwfImaging, stopEncoding()");
 			_tEncoder.stop();
 		}
 		
@@ -210,8 +185,6 @@ package be.proximity.banr.swfImaging {
 					save(r, encode(r), FileExtensions.JPG);	
 					r.destroy();
 					updateProgress();
-				}else {
-					trace("SwfImaging, buffer " + _qProcess.length + ", none ready");
 				}
 				
 				//_tEncoder.reset();

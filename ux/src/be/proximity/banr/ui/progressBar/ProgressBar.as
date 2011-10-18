@@ -38,7 +38,7 @@ package be.proximity.banr.ui.progressBar {
 		}
 		
 		private function onProgressBarEnterFrame(e:Event):void {
-			_scroll -= 0.4;
+			_scroll += 0.3;
 			_scroll = _scroll % _bd.width;	
 			requestRender(true);
 		}

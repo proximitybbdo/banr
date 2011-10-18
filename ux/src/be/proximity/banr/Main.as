@@ -1,4 +1,5 @@
 package be.proximity.banr {
+
 	import be.dreem.ui.components.form.BaseComponent;
 	import be.dreem.ui.components.form.events.ComponentDataEvent;
 	import be.dreem.ui.components.form.events.ComponentInteractiveEvent;
@@ -41,15 +42,7 @@ package be.proximity.banr {
 		private var _sKeyStroke:String = "";
 		
 		public function Main():void {
-			super("main");
-			
-			
-			
-		}
-		
-		private function onSwfImagingProgress(e:SwfImagingEvent):void {
-			trace(_si.progress);
-			progressBar.data = _si.progress;
+			super("main");			
 		}
 		
 		override protected function initComponent():void {
@@ -67,16 +60,18 @@ package be.proximity.banr {
 			addEventListener(NativeDragEvent.NATIVE_DRAG_ENTER, onDragIn);
 			addEventListener(NativeDragEvent.NATIVE_DRAG_DROP, onDragDrop);
 			addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
-			
-			//map turn button data to generic filesize data
-			//turnButton.componentData = ApplicationData.getInstance().fileSize;
-			//turnButton.addEventListener(ComponentInteractiveEvent.INPUT, onTurnButtonInput, false, 0, true);
+		
 			turnButton.componentData.addEventListener(ComponentDataEvent.UPDATE, onTurnButtonDataUpdate, false, 0, true);
 			
 			_tKeyStroke = new Timer(500);
 			_tKeyStroke.addEventListener(TimerEvent.TIMER, onKeyStrokeTimer, false, 0, true);			
 			
 			onFileSizeUpdate(null);
+		}
+		
+		private function onSwfImagingProgress(e:SwfImagingEvent):void {
+			trace(_si.progress);
+			progressBar.data = _si.progress;
 		}
 		
 		private function onMouseWheel(e:MouseEvent):void {
@@ -124,20 +119,7 @@ package be.proximity.banr {
 			
 			_tKeyStroke.reset();
 			_tKeyStroke.start();			
-		}	
-		
-		/*
-		private function onTurnButtonInput(e:ComponentInteractiveEvent):void {
-			//dd.displayNumber(Math.random() * 9);
-			//turning button feeds generic filesize
-			//trace(": " + turnButton.componentData.increment + " " + ApplicationData.getInstance().fileSize.value);
-			//ApplicationData.getInstance().fileSize.value = Math.round(turnButton.componentData.value * 10) * 5;
-			//trace("> " + ApplicationData.getInstance().fileSize.value);
-			//dd.displayNumber(Math.round(turnButton.revolutionRatio *  9));
-			//ApplicationData.getInstance().fileSize.value = Math.round(turnButton.componentData.value) * 5;
-			ApplicationData.getInstance().fileSize.value += Math.round(turnButton.componentData.increment) * 5;
 		}
-		//*/
 		
 		private function onClick(e:MouseEvent):void {
 			//new DockIcon().
@@ -153,18 +135,19 @@ package be.proximity.banr {
 			
 			var files:Object = e.clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT);
 			///*
-			for each (var file:File in files) {
-				_si.add(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value);
+			//trace(typeof(files));
+			for each (var f:File in files) {
+				addFiles(f);
 			}
-			//*/
-			
-			//ir = _si.add(files[0], 40, 15);
-			//ir.process();
-			//ir.addEventListener(ImagingRequestEvent.IMAGING_COMPLETE, onImagingComplete);
 		}
 		
-		private function onImagingComplete(e:ImagingRequestEvent):void {
-			stage.addChild(new Bitmap(ir.image));
+		private function addFiles(file:File):void {
+			if (file.isDirectory) {
+				for each (var f:File in file.getDirectoryListing())
+					addFiles(f);
+			}else {
+				_si.add(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value);
+			}
 		}
 	}
 	
