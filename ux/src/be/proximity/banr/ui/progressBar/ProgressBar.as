@@ -26,7 +26,10 @@ package be.proximity.banr.ui.progressBar {
 		
 		override protected function initComponent():void {
 			_bd = new ProgressFill(3, 1);
+			
 		}
+		
+		
 		
 		override protected function render():void {
 			if (data >= 0 ) {
@@ -34,9 +37,31 @@ package be.proximity.banr.ui.progressBar {
 			}
 		}
 		
-		private function renderBar():void {
+		private function onProgressBarEnterFrame(e:Event):void {
 			_scroll -= 0.4;
-			_scroll = _scroll % _bd.width;		
+			_scroll = _scroll % _bd.width;	
+			requestRender(true);
+		}
+		
+		override public function get data():* {
+			return super.data;
+		}
+		
+		override public function set data(value:*):void {
+			super.data = value;
+			
+			if (data) {
+				
+				if (data > 0) {					
+					addEventListener(Event.ENTER_FRAME, onProgressBarEnterFrame, false, 0, true);
+				}else {
+					removeEventListener(Event.ENTER_FRAME, onProgressBarEnterFrame);
+				}
+			}
+		}
+		
+		private function renderBar():void {
+				
 			
 			container.graphics.clear();
 			container.graphics.beginBitmapFill(_bd, new Matrix(1, 0, 0, 1, _scroll, 0), true, true);

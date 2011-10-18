@@ -66,6 +66,7 @@ package be.proximity.banr {
 			//register for the file drag events
 			addEventListener(NativeDragEvent.NATIVE_DRAG_ENTER, onDragIn);
 			addEventListener(NativeDragEvent.NATIVE_DRAG_DROP, onDragDrop);
+			addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
 			
 			//map turn button data to generic filesize data
 			//turnButton.componentData = ApplicationData.getInstance().fileSize;
@@ -76,6 +77,14 @@ package be.proximity.banr {
 			_tKeyStroke.addEventListener(TimerEvent.TIMER, onKeyStrokeTimer, false, 0, true);			
 			
 			onFileSizeUpdate(null);
+		}
+		
+		private function onMouseWheel(e:MouseEvent):void {
+			if (e.delta > 0) {
+				turnButton.componentData.value += 5; 
+			}else {
+				turnButton.componentData.value -= 5;
+			}
 		}
 		
 		private function onTurnButtonDataUpdate(e:ComponentDataEvent):void {
@@ -117,7 +126,7 @@ package be.proximity.banr {
 			_tKeyStroke.start();			
 		}	
 		
-		///*
+		/*
 		private function onTurnButtonInput(e:ComponentInteractiveEvent):void {
 			//dd.displayNumber(Math.random() * 9);
 			//turning button feeds generic filesize
