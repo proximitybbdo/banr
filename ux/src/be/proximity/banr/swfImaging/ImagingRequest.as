@@ -1,4 +1,4 @@
-package be.proximity.banr.swfImaging.data {
+package be.proximity.banr.swfImaging {
 	import be.proximity.banr.swfImaging.events.ImagingRequestEvent;
 	import flash.display.BitmapData;
 	import flash.display.Loader;
@@ -21,18 +21,16 @@ package be.proximity.banr.swfImaging.data {
 		private var _file:File;
 		private var _timing:uint;
 		private var _fileSize:uint;
-		private var _exportExtentions:Array;
-		private var _bgColor:uint;
+		private var _encodingSettings:Array;
 		
 		private var _l:Loader;
 		private var _loaded:Boolean = false;
-		//private var _imaged:Boolean = false;
 		private var _image:BitmapData;
+		private var _output:Array;
 		
 		private var _isProcessing:Boolean = false;
 		private var _isProcessed:Boolean = false;
 		
-		//private var _t:Timer;
 		private var _sp:Sprite;
 		private var _currentFrame:int;
 		
@@ -41,24 +39,21 @@ package be.proximity.banr.swfImaging.data {
 		 * @param	pFile	swf file
 		 * @param	pFileSize	target filesize in kB
 		 * @param	pTiming	target timing in seconds
-		 * @param	pExportExtentions	Array of supported extentions to export to (ex. [".jpg",".gif"]
+		 * @param	pEncodingSettings	Array of supported extentions to export (ex. ["jpg","gif"])
 		 * @param	pBgColor	background color if swf is transparent
 		 */
-		public function ImagingRequest(pFile:File, pFileSize:uint, pTiming:uint, pExportExtentions:Array, pBgColor:uint = 0xFF0000) {
+		public function ImagingRequest(pFile:File, pTiming:uint, pEncodingSettings:Array) {
 			_file = pFile;
 			_timing = pTiming;
-			_fileSize = pFileSize;			
-			_bgColor = pBgColor;	
-			_exportExtentions = pExportExtentions;
-			
-			_sp = new Sprite();
-		}
+			_encodingSettings = pEncodingSettings;
+		}		
 		
-		public function process():void {
+		internal function process():void {
 			reset();
 			
 			_isProcessing = true;
 			_isProcessed = false;
+			_output = new Array();
 			
 			_l = new Loader();
 			_l.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete, false, 0, true);
@@ -83,24 +78,24 @@ package be.proximity.banr.swfImaging.data {
 		private function onSpEnterFrame(e:Event):void {
 			_currentFrame++;
 			
-			//trace("onSpEnterFrame");
 			if (_currentFrame > _timing * _l.contentLoaderInfo.frameRate) {
 				_sp.removeEventListener(Event.ENTER_FRAME, onSpEnterFrame, false);
 				createImage();
 			}
 		}
 		
-		private function createImage():void {
-			
-			//trace("ImagingRequest.createImage()");
-			_image = new BitmapData(_l.contentLoaderInfo.width, _l.contentLoaderInfo.height, false, _bgColor);
+		private function createImage():void {			
+			_image = new BitmapData(_l.contentLoaderInfo.width, _l.contentLoaderInfo.height, true);
 			_image.draw(_l.contentLoaderInfo.content);
 			
-			//_imaged = true;
+			///*
 			_isProcessing = false;
 			_isProcessed = true;
-			//dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.IMAGING_COMPLETE));
+			
+			
+			
 			dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.PROCESSING_COMPLETE));
+			//*/
 		}
 		
 		public function get isLoaded():Boolean {
@@ -119,10 +114,6 @@ package be.proximity.banr.swfImaging.data {
 			return _file;
 		}
 		
-		public function get fileSize():uint {
-			return _fileSize;
-		}
-		
 		public function get isProcessing():Boolean {
 			return _isProcessing;
 		}
@@ -131,8 +122,8 @@ package be.proximity.banr.swfImaging.data {
 			return _isProcessed;
 		}
 		
-		public function get exportExtentions():Array {
-			return _exportExtentions;
+		public function get encodingSettings():Array {
+			return _encodingSettings;
 		}
 		
 		private function reset():void {
@@ -151,9 +142,8 @@ package be.proximity.banr.swfImaging.data {
 		}
 		
 		public function destroy():void {
-			_file = null;
-			
-			reset();		
+			reset();	
+			_file = null;				
 		}
 		
 	}

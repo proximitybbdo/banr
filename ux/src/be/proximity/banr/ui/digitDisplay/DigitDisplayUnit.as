@@ -81,7 +81,7 @@ package be.proximity.banr.ui.digitDisplay {
 				break;
 				
 				case "B" :
-					s = "1234567";
+					s = "34567";
 				break;
 				
 				case "C" :
@@ -92,12 +92,52 @@ package be.proximity.banr.ui.digitDisplay {
 					s = "14567";
 				break;
 				
+				case "F" :
+					s = "1567";
+				break;
+				
+				case "H" :
+					s = "23567";
+				break;
+				
+				case "J" :
+					s = "234";
+				break;
+				
+				case "O" :
+					s = "123456";
+				break;
+				
+				case "P" :
+					s = "12567";
+				break;
+				
+				case "S" :
+					s = "13467";
+				break;
+				
+				case "T" :
+					s = "4567";
+				break;
+				
+				case "U" :
+					s = "23456";
+				break;
+				
+				case "L" :
+					s = "456";
+				break;
+				
 				case "_" :
 					s = "4";
 				break;
 				
 				case "-" :
 					s = "7";
+				break;
+				
+				case "=" :
+					s = "47";
 				break;
 				
 			}

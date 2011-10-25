@@ -25,6 +25,9 @@ package be.proximity.banr.ui.digitDisplay {
 				while (s.length < 3)
 					s = "_" + s;
 				
+				if(s == "666")
+					s = "SAT";
+				
 				d1.displayCharacter(s.substr(0, 1));
 				d2.displayCharacter(s.substr(1, 1));
 				d3.displayCharacter(s.substr(2, 1));

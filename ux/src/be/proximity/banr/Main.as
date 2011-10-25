@@ -5,8 +5,8 @@ package be.proximity.banr {
 	import be.dreem.ui.components.form.events.ComponentInteractiveEvent;
 	import be.proximity.banr.applicationData.ApplicationData;
 	import be.proximity.banr.swfImaging.*;
-	import be.proximity.banr.swfImaging.constants.FileExtensions;
-	import be.proximity.banr.swfImaging.data.ImagingRequest;
+	import be.proximity.banr.swfImaging.imageEncoder.*;
+	
 	import be.proximity.banr.swfImaging.events.ImagingRequestEvent;
 	import be.proximity.banr.swfImaging.events.SwfImagingEvent;
 	import be.proximity.banr.ui.buttons.TurnButton;
@@ -41,7 +41,6 @@ package be.proximity.banr {
 		
 		private var _tKeyStroke:Timer;
 		private var _sKeyStroke:String = "";
-		private var FileExtentions;
 		
 		
 		
@@ -56,8 +55,6 @@ package be.proximity.banr {
 			_si = new SwfImaging(20);
 			_si.addEventListener(SwfImagingEvent.PROGRESS, onSwfImagingProgress, false, 0, true);
 			
-			addEventListener(MouseEvent.CLICK, onClick);
-			
 			ApplicationData.getInstance().fileSize.addEventListener(ComponentDataEvent.UPDATE, onFileSizeUpdate, false, 0, true);
 			
 			//register for the file drag events
@@ -70,9 +67,7 @@ package be.proximity.banr {
 			_tKeyStroke = new Timer(500);
 			_tKeyStroke.addEventListener(TimerEvent.TIMER, onKeyStrokeTimer, false, 0, true);			
 			
-			onFileSizeUpdate(null);
-			
-			
+			onFileSizeUpdate(null);			
 		}
 		
 		private function onSwfImagingProgress(e:SwfImagingEvent):void {
@@ -124,11 +119,7 @@ package be.proximity.banr {
 			}
 			
 			_tKeyStroke.reset();
-			_tKeyStroke.start();			
-		}
-		
-		private function onClick(e:MouseEvent):void {
-			//new DockIcon().
+			_tKeyStroke.start();	
 		}
 		
 		
@@ -152,7 +143,9 @@ package be.proximity.banr {
 					addFiles(f);
 			}else {
 				//_si.add(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value);
-				_si.add(new ImagingRequest(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value, [FileExtensions.JPG]));
+				trace("ADD " + file);
+				//_si.add(new ImagingRequest(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value, [Encoders.JPG, Encoders.JPG, Encoders.JPG]));
+				_si.add(new ImagingRequest(file, ApplicationData.getInstance().timing.value, [/*new EncodingSettings(Encoders.PNG), */new EncodingSettings(Encoders.JPG, ApplicationData.getInstance().fileSize.valueStep)]));
 			}
 		}
 	}
