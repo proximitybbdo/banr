@@ -10,7 +10,9 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 	 */
 	public class JpgEnc implements IEncoder {
 		
-		//table compossed by average result of 5 random banners
+		//table composed by average result of 5 random banners.
+		//first value, 1, is the normalised filesize at 100% quality
+		//the following values are the normalised filesizes at 99%, 98%, and so on.
 		private var _jpgCompressionTable:Array = [
 												1,
 												.863,
@@ -112,12 +114,7 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 												.060,
 												.058,
 												.058
-											];
-
-		
-		
-		
-		
+											];		
 		
 		public function JpgEnc() {
 			
@@ -137,35 +134,58 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 				b = new JPGEncoder(targetQuality).encode(r.image)
 				trace(Number(b.length));
 			}
-			//*/
+			*/
 			
 			///*
+			//try to target the filesize by statistics
 			if (b.length / 1024 > settings.fileSize) {
-				targetQuality = getQualityByFileSize(b.length, settings.fileSize, img.width, img.height);			
+				targetQuality = getQualityByFileSize(b.length, settings.fileSize * 1024, img.width, img.height);		
+				trace("Quality: " + targetQuality);
 				e = new JPGEncoder(targetQuality);
 				b = e.encode(img);
 			}
+			//*/
 			
-			trace("JPG ENCODED");
+			//gradually lower the targetQuality to obtain desired filesize
+			while ((b.length / 1024 > settings.fileSize) && targetQuality > 10) {
+				targetQuality -= 5;
+				
+				e = new JPGEncoder(targetQuality);
+				b = e.encode(img);
+				trace("lowering targetQuality " + targetQuality + ", " + Math.round(b.length / 1024) + "kb");
+			}
+			
+			//trace("JPG ENCODED");
 			
 			return b;
 		}
 		
 		
-		public function getQualityByFileSize(fileSizeAt100Quality:uint, desiredFileSize:uint, imageWidth:int, imageHeight:int, saveMargin:Number = .8):Number {
+		public function getQualityByFileSize(fileSizeAt100Quality:uint, desiredFileSize:uint, imageWidth:int, imageHeight:int, saveMargin:Number = .98):Number {
 			
-			var compressionRatio:Number =  ( fileSizeAt100Quality / desiredFileSize ) / 1024;
+			var compressionRatio:Number =  desiredFileSize / fileSizeAt100Quality;
 			
 			var pixelDetail:Number = fileSizeAt100Quality / (imageHeight * imageWidth);
 			
+			trace("desiredFileSize " + desiredFileSize);
+			trace("compressionRatio " + compressionRatio);
 			trace("pixelDetail " + pixelDetail);
+			trace("fileSizeAt100Quality " + fileSizeAt100Quality);
+			trace("desiredFileSize " + desiredFileSize);
+			
+			//a full noise image of 800x800 gives a pixelDetail around 4.1
+			//think 
+			
+			
 			
 			for (var i:int = 0; i < _jpgCompressionTable.length; i++) {
-				//trace("q = " + i + " " + compressionRatio +" < " + _jpgCompressionTable[i]);
-				if ((compressionRatio * saveMargin) > _jpgCompressionTable[i])
-					return _jpgCompressionTable.length - i;
-			}
+				//trace("q = " + (compressionRatio * saveMargin * (1/pixelDetail)) +" > " + _jpgCompressionTable[i]);
+				if ((compressionRatio * saveMargin * (1/pixelDetail)) > _jpgCompressionTable[i]) {
 					
+					return _jpgCompressionTable.length - i;
+				}
+			}
+			
 			return 5;
 		}
 		

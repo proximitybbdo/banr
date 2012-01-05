@@ -90,9 +90,7 @@ package be.proximity.banr.swfImaging {
 			
 			///*
 			_isProcessing = false;
-			_isProcessed = true;
-			
-			
+			_isProcessed = true;			
 			
 			dispatchEvent(new ImagingRequestEvent(ImagingRequestEvent.PROCESSING_COMPLETE));
 			//*/

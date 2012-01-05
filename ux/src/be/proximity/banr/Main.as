@@ -40,8 +40,7 @@ package be.proximity.banr {
 		private var ir:ImagingRequest;		
 		
 		private var _tKeyStroke:Timer;
-		private var _sKeyStroke:String = "";
-		
+		private var _sKeyStroke:String = "";		
 		
 		
 		public function Main():void {

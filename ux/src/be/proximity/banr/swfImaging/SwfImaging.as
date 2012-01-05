@@ -86,7 +86,6 @@ package be.proximity.banr.swfImaging {
 							}
 						}
 			
-			
 			return ir;
 		}
 		
@@ -182,7 +181,7 @@ package be.proximity.banr.swfImaging {
 					trace("encoding all finished");
 				}
 		}
-		
+		/*
 		private function encode(ir:ImagingRequest):void {
 			//trace("SwfImaging, encode()")
 			//_encodingStart = new Date();
@@ -200,7 +199,7 @@ package be.proximity.banr.swfImaging {
 			
 			//return ImageEncoder.getEncoder(ir.exportFormats[0]).encode(ir.image, ir.fileSize);
 		}
-		
+		*/
 		private function encodeImageRequest(ir:ImagingRequest):void {
 			_currentEncoderSetting = 0;
 			_encodingImagingRequest = true;
