@@ -12,6 +12,7 @@ package be.dreem.ui.components.form.buttons {
 		
 		
 		private var _mouseHoldsOn:Boolean = false;
+		private var _mouseIsOver:Boolean = false;
 		
 		//private var _spHitArea:Sprite;
 		
@@ -61,6 +62,7 @@ package be.dreem.ui.components.form.buttons {
 		protected function onHitAreaRollOut(e:MouseEvent):void {
 			//if(stage)
 				//stage.addEventListener(MouseEvent.MOUSE_UP, onStageMouseUp, false, 0, true);
+			_mouseIsOver = false;
 			
 			renderRollOut();
 			
@@ -83,6 +85,7 @@ package be.dreem.ui.components.form.buttons {
 		protected function onHitAreaRollOver(e:MouseEvent):void {
 			//if(stage)
 				//stage.removeEventListener(MouseEvent.MOUSE_UP, onStageMouseUp, false);
+			_mouseIsOver = true;
 			
 			renderRollOver();
 			
@@ -134,6 +137,10 @@ package be.dreem.ui.components.form.buttons {
 		
 		public function get mouseHoldsOn():Boolean {
 			return _mouseHoldsOn;
+		}
+		
+		public function get mouseIsOver():Boolean {
+			return _mouseIsOver;
 		}
 		
 		/*

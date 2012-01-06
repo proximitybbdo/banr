@@ -39,7 +39,7 @@ package be.proximity.banr.swfImaging {
 		 * @param	pFile	swf file
 		 * @param	pFileSize	target filesize in kB
 		 * @param	pTiming	target timing in seconds
-		 * @param	pEncodingSettings	Array of supported extentions to export (ex. ["jpg","gif"])
+		 * @param	pEncodingSettings	Array of EncodingSetting Objects
 		 * @param	pBgColor	background color if swf is transparent
 		 */
 		public function ImagingRequest(pFile:File, pTiming:uint, pEncodingSettings:Array) {

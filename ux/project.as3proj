@@ -49,6 +49,7 @@
   <libraryPaths>
     <element path="lib\greensock.swc" />
     <element path="lib\as3corelib.swc" />
+    <element path="lib\UltimateBlendModeShader.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

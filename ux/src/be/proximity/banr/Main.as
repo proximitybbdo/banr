@@ -6,21 +6,20 @@ package be.proximity.banr {
 	import be.proximity.banr.applicationData.ApplicationData;
 	import be.proximity.banr.swfImaging.*;
 	import be.proximity.banr.swfImaging.imageEncoder.*;
+	import be.proximity.banr.ui.backlight.Backlight;
+	import be.proximity.banr.ui.cornerLights.CornerLights;
+	import be.proximity.banr.ui.holoInterface.HoloInterface;
 	
 	import be.proximity.banr.swfImaging.events.ImagingRequestEvent;
 	import be.proximity.banr.swfImaging.events.SwfImagingEvent;
-	import be.proximity.banr.ui.buttons.TurnButton;
-	import be.proximity.banr.ui.digitDisplay.*;
-	import be.proximity.banr.ui.progressBar.ProgressBar;
-	import com.greensock.plugins.ShortRotationPlugin;
+	
 	import com.greensock.plugins.TweenPlugin;
-	import flash.display.Bitmap;
-	import flash.net.SharedObject;
-	import flash.ui.Keyboard;
-	import flash.utils.Timer;
+	import flash.display.*;
+	import flash.net.*;
+	import flash.ui.*;
+	import flash.utils.*;
 	
 	import flash.desktop.*;
-	import flash.display.Sprite;
 	import flash.events.*;
 	import flash.filesystem.*;
 	
@@ -30,17 +29,23 @@ package be.proximity.banr {
 	 */
 	public class Main extends BaseComponent {
 		
-		public var lighting:Sprite;
-		public var dd:DigitDisplay;
-		public var turnButton:TurnButton;
-		public var progressBar:ProgressBar;
+		//public var lighting:Sprite;
+		//public var dd:DigitDisplay;
+		//public var turnButton:TurnButton;
+		//public var progressBar:ProgressBar;
+		
+		public var hi:HoloInterface;
+		public var cornerLights:CornerLights;
+		public var backlightRim:Backlight;
+		public var backlightBase:Backlight;
+		
+		public var color:Sprite;
+		public var cover:Sprite;
+		public var glass:Sprite;
 		
 		private var _si:SwfImaging;
 		
-		private var ir:ImagingRequest;		
-		
-		private var _tKeyStroke:Timer;
-		private var _sKeyStroke:String = "";		
+		private var ir:ImagingRequest;
 		
 		
 		public function Main():void {
@@ -49,39 +54,61 @@ package be.proximity.banr {
 		
 		override protected function initComponent():void {
 			
-			lighting.mouseEnabled = false;
+
+			color.mouseChildren = color.mouseEnabled = false;			
 			
-			_si = new SwfImaging(20);
-			_si.addEventListener(SwfImagingEvent.PROGRESS, onSwfImagingProgress, false, 0, true);
+			_si = new SwfImaging(10);			
 			
-			ApplicationData.getInstance().fileSize.addEventListener(ComponentDataEvent.UPDATE, onFileSizeUpdate, false, 0, true);
+			//initialise holo interface
+			hi.init(_si);			
+			
+			backlightRim.init(_si);
+			backlightBase.init(_si, true);
 			
 			//register for the file drag events
 			addEventListener(NativeDragEvent.NATIVE_DRAG_ENTER, onDragIn);
 			addEventListener(NativeDragEvent.NATIVE_DRAG_DROP, onDragDrop);
+			addEventListener(NativeDragEvent.NATIVE_DRAG_EXIT, onDragExit);
 			addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
-		
-			turnButton.componentData.addEventListener(ComponentDataEvent.UPDATE, onTurnButtonDataUpdate, false, 0, true);
+			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
 			
-			_tKeyStroke = new Timer(500);
-			_tKeyStroke.addEventListener(TimerEvent.TIMER, onKeyStrokeTimer, false, 0, true);			
-			
-			onFileSizeUpdate(null);			
+			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 		
-		private function onSwfImagingProgress(e:SwfImagingEvent):void {
-			trace(_si.progress);
-			progressBar.data = _si.progress;
+		
+		
+		private function onMouseUp(e:MouseEvent):void {
+			//stage.nativeWindow.move();
+			
 		}
+		
+		private function onMouseDown(e:MouseEvent):void {
+			//stage.nativeWindow.minimize();
+			
+			//stage.nativeWindow.orderToFront();
+			//stage.nativeWindow.close();
+			stage.nativeWindow.startMove();
+		}
+		
+		private function onDragExit(e:NativeDragEvent):void {
+			cornerLights.dimAll();
+		}
+		
+		private function onMouseOut(e:MouseEvent):void {
+			cornerLights.dimAll();
+		}
+		
+		
 		
 		private function onMouseWheel(e:MouseEvent):void {
 			if (e.delta > 0) {
-				turnButton.componentData.value += 5; 
+				//turnButton.componentData.value += 5; 
 			}else {
-				turnButton.componentData.value -= 5;
+				//turnButton.componentData.value -= 5;
 			}
 		}
-		
+		/*
 		private function onTurnButtonDataUpdate(e:ComponentDataEvent):void {
 			//trace(":> " + turnButton.componentData.increment);
 			ApplicationData.getInstance().fileSize.steps = 5;
@@ -90,40 +117,16 @@ package be.proximity.banr {
 			
 			//ApplicationData.getInstance().fileSize.value = ApplicationData.getInstance().fileSize.value - ApplicationData.getInstance().fileSize.value % 5 + Math.round(turnButton.componentData.increment * 5);
 		}
+		*/
 		
-		private function onFileSizeUpdate(e:ComponentDataEvent):void {
-			//trace("onFileSizeUpdate " +  (ApplicationData.getInstance().fileSize.value / 5));
-			 dd.data = ApplicationData.getInstance().fileSize.valueStep;
-			 
-		}
 		
-		private function onKeyStrokeTimer(e:TimerEvent):void {
-			_tKeyStroke.stop();			
-		}
 		
-		override protected function addedToStage():void {
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, onStageKeyDown, false, 0, true);
-		}
 		
-		private function onStageKeyDown(e:KeyboardEvent):void {
-			
-			if (!_tKeyStroke.running)
-				_sKeyStroke = "";
-			
-			for (var i:int = 0; i <= 9; i++) {
-				if (e.keyCode == Keyboard["NUMPAD_" + i]) {
-					_sKeyStroke += i.toString();
-					ApplicationData.getInstance().fileSize.value = parseInt(_sKeyStroke);
-				}
-			}
-			
-			_tKeyStroke.reset();
-			_tKeyStroke.start();	
-		}
 		
 		
 		 public function onDragIn(e:NativeDragEvent):void{
 			NativeDragManager.acceptDragDrop(this);
+			cornerLights.lightAll();
 		}
 
 		public function onDragDrop(e:NativeDragEvent):void{
@@ -134,6 +137,8 @@ package be.proximity.banr {
 			//trace(typeof(files));
 			for each (var f:File in files)
 				addFiles(f);
+				
+			cornerLights.dimAll();
 		}
 		
 		private function addFiles(file:File):void {
