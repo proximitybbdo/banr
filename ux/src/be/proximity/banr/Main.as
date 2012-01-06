@@ -54,7 +54,6 @@ package be.proximity.banr {
 		
 		override protected function initComponent():void {
 			
-
 			color.mouseChildren = color.mouseEnabled = false;			
 			
 			_si = new SwfImaging(10);			
@@ -99,30 +98,13 @@ package be.proximity.banr {
 			cornerLights.dimAll();
 		}
 		
-		
-		
 		private function onMouseWheel(e:MouseEvent):void {
 			if (e.delta > 0) {
-				//turnButton.componentData.value += 5; 
+				ApplicationData.getInstance().fileSize.value += 5;
 			}else {
-				//turnButton.componentData.value -= 5;
+				ApplicationData.getInstance().fileSize.value -= 5;
 			}
-		}
-		/*
-		private function onTurnButtonDataUpdate(e:ComponentDataEvent):void {
-			//trace(":> " + turnButton.componentData.increment);
-			ApplicationData.getInstance().fileSize.steps = 5;
-			ApplicationData.getInstance().fileSize.value += turnButton.componentData.increment;
-			ApplicationData.getInstance().fileSize.steps = 1;
-			
-			//ApplicationData.getInstance().fileSize.value = ApplicationData.getInstance().fileSize.value - ApplicationData.getInstance().fileSize.value % 5 + Math.round(turnButton.componentData.increment * 5);
-		}
-		*/
-		
-		
-		
-		
-		
+		}		
 		
 		 public function onDragIn(e:NativeDragEvent):void{
 			NativeDragManager.acceptDragDrop(this);

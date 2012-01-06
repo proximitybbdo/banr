@@ -40,7 +40,7 @@ package be.proximity.banr.ui.progressRing {
 					//BUILD DOWN
 					if ((((i) / (numChildren) ) < (data))) {
 						
-						Animation.fadeOut(getChildByName("s" + ((numChildren - i))), animationDelay * .01);
+						Animation.fadeOut(getChildByName("s" + ((numChildren - i))), animationDelay * .008);
 						animationDelay++;
 					}
 					else

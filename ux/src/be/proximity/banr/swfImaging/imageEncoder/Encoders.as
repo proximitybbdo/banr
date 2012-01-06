@@ -20,12 +20,14 @@ package be.proximity.banr.swfImaging.imageEncoder {
 			switch(outputFormat.toLowerCase()) {
 				
 				case JPG :
-					return new JpgEnc();
+					//return new JpgEnc();
+					return new AsyncJpgEncoder();
 				break;
-				
+				/*
 				case PNG :
 					return new PngEnc();
 				break;
+				*/
 			}
 			
 			

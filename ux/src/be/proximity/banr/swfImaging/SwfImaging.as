@@ -2,9 +2,9 @@ package be.proximity.banr.swfImaging {
 	import be.proximity.banr.swfImaging.events.ImagingRequestEvent;
 	import be.proximity.banr.swfImaging.events.SwfImagingEvent;
 	import be.proximity.banr.swfImaging.imageEncoder.Encoders;
+	import be.proximity.banr.swfImaging.imageEncoder.encoders.IEncoder;
 	import be.proximity.banr.swfImaging.imageEncoder.EncodingSettings;
 	import be.proximity.banr.swfImaging.imageEncoder.events.ImageEncoderEvent;
-	import be.proximity.banr.swfImaging.imageEncoder.ImageEncoder;
 	import com.adobe.images.JPGEncoder;
 	import com.adobe.images.PNGEncoder;
 	import flash.events.EventDispatcher;
@@ -32,14 +32,15 @@ package be.proximity.banr.swfImaging {
 		
 		private const DELAY:uint = 400;
 		
-		private var _ic:ImageEncoder;
-		
 		private var _totalToProcess:int = 0;
 		private var _progress:Number = 0;
 		private var _currentEncoderSetting:uint = 0;
 		private var _isEncodingImagingRequest:Boolean = false;
 		
 		private var _isCompleted:Boolean =  true;
+		
+		private var _enc:IEncoder;
+		private var _ir:ImagingRequest;
 		
 		public function SwfImaging(pProcessBuffer:uint = 3) {
 			
@@ -67,7 +68,7 @@ package be.proximity.banr.swfImaging {
 		}
 		
 		public function add(ir:ImagingRequest):ImagingRequest {
-			trace("SwfImaging, add()");
+			//trace("SwfImaging, add()");
 			
 			if (ir)
 				if(ir.file)
@@ -101,7 +102,7 @@ package be.proximity.banr.swfImaging {
 			if (_qProcess.length < _processBuffer && _qInput.length)			
 				addToProcessQueue(_qInput.shift() as ImagingRequest);
 			
-			trace("SwfImaging, fillProcessQueue() " + _qProcess.length);
+			//trace("SwfImaging, fillProcessQueue() " + _qProcess.length);
 		}
 		
 		private function addToProcessQueue(ir:ImagingRequest):void {			
@@ -110,28 +111,6 @@ package be.proximity.banr.swfImaging {
 			ir.addEventListener(ImagingRequestEvent.PROCESSING_COMPLETE, onRequestProcessingComplete, false, 0, true);
 			ir.process();
 		}
-		
-		/*
-		private function removeFromProcessQueue(ir:ImagingRequest):ImagingRequest {
-			
-			for (var i:int = 0; i < _qProcess.length; i++)
-				if (ImagingRequest(_qProcess[i]) == ir)
-					return _qProcess.splice(i, 1)[0];
-			
-			return null;
-		}
-		
-		
-		private function removeNextFromProcessQueue():ImagingRequest {		
-			var ir:ImagingRequest;
-			
-			if (_qProcess.length) {				
-				_qProcess.shift() as ImagingRequest;				
-			}
-			
-			return ir;
-		}
-		*/
 		
 		/**
 		 * remove the complete queue. The current request will be processed.
@@ -198,11 +177,18 @@ package be.proximity.banr.swfImaging {
 				
 				var es:EncodingSettings = ir.encodingSettings[_currentEncoderSetting];
 				
-				var ba:ByteArray = Encoders.getEncoder(es.outputFormat).encode(ir.image, es);				
+				_enc = Encoders.getEncoder(es.outputFormat);
+				_ir = ir;
+				_enc.encode(ir.image, es, function(){onEncodingComplete()});
+				
+				
+				/*
+				var ba:ByteArray = .encode(ir.image, es);				
 				
 				_currentEncoderSetting++;
 				
 				setTimeout(saveToFile, DELAY, ir, ba, es);
+				*/
 				
 			}else {
 				//finished encoding all encodingSettings for imagingRequest
@@ -215,6 +201,11 @@ package be.proximity.banr.swfImaging {
 			}
 		}
 		
+		public function onEncodingComplete():void {				
+					
+				//_enc.destroy();
+				setTimeout(saveToFile, DELAY, _ir, _enc.output, _ir.encodingSettings[_currentEncoderSetting]);
+		}		
 		
 		private function saveToFile(ir:ImagingRequest, encoded:ByteArray, es:EncodingSettings):void {
 			//trace("SwfImaging, saveToFile()");
@@ -233,6 +224,7 @@ package be.proximity.banr.swfImaging {
 			fs.close();
 			//*/
 			
+			_currentEncoderSetting++;
 			setTimeout(encodeNextSetting, DELAY, ir);
 		}
 		
@@ -245,14 +237,14 @@ package be.proximity.banr.swfImaging {
 		}
 		
 		/**
-		 * Ratio from 0 to 1 stating the progress of the processing
+		 * Ratio from 0 to 1, the progress of the processing
 		 */
 		public function get progress():Number {
 			return _progress;
 		}
 		
 		/**
-		 * True if all is processed
+		 * True if all is processed 
 		 */
 		public function get isCompleted():Boolean {
 			return _isCompleted;

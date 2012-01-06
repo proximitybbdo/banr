@@ -8,7 +8,9 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 	 * @author Matthias Crommelinck
 	 */
 	public interface IEncoder {
-		function encode(img:BitmapData, settings:EncodingSettings):ByteArray
+		function encode(img:BitmapData, settings:EncodingSettings, callback:Function):void;		
+		function destroy():void;
+		function get output():ByteArray;
 	}
 	
 }

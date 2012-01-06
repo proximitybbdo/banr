@@ -50,6 +50,7 @@
     <element path="lib\greensock.swc" />
     <element path="lib\as3corelib.swc" />
     <element path="lib\UltimateBlendModeShader.swc" />
+    <element path="lib\jpegencoder_10092010.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

@@ -24,6 +24,7 @@
       <path-element>C:\repos\banr\ux\lib\greensock.swc</path-element>
       <path-element>C:\repos\banr\ux\lib\as3corelib.swc</path-element>
       <path-element>C:\repos\banr\ux\lib\UltimateBlendModeShader.swc</path-element>
+      <path-element>C:\repos\banr\ux\lib\jpegencoder_10092010.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>

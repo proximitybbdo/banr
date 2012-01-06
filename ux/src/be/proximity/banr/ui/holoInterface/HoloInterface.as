@@ -10,6 +10,7 @@ package be.proximity.banr.ui.holoInterface {
 	import be.proximity.banr.ui.helpers.Animation;
 	import be.proximity.banr.ui.progressRing.ProgressRing;
 	import flash.events.*;
+	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	import flash.ui.Mouse;
 	import flash.utils.Timer;
@@ -55,14 +56,16 @@ package be.proximity.banr.ui.holoInterface {
 			
 			ApplicationData.getInstance().fileSize.addEventListener(ComponentDataEvent.UPDATE, onFileSizeUpdate, false, 0, true);
 			
-			onFileSizeUpdate(null);		
-			
+			onFileSizeUpdate(null);
 			
 			btnClose.interactive = false;	
-			addEventListener(MouseEvent.ROLL_OVER, onMouseRollOver);
-			addEventListener(MouseEvent.ROLL_OUT, onMouseRollOut);
-			addEventListener(MouseEvent.CLICK, onMouseClick);			
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
+			addEventListener(MouseEvent.CLICK, onMouseClick);		
 			
+			determinDisplay();
+		}
+		
+		private function onStageMouseMove(e:MouseEvent):void {
 			determinDisplay();
 		}
 		
@@ -98,30 +101,23 @@ package be.proximity.banr.ui.holoInterface {
 			if (!_tKeyStroke.running)
 				_sKeyStroke = "";
 			
+			//trace("e.charCode " + e.charCode);
 			for (var i:int = 0; i <= 9; i++) {
-				if (e.keyCode == Keyboard["NUMPAD_" + i]) {
+				if (e.keyCode == Keyboard["NUMPAD_" + i] || e.keyCode == Keyboard["NUMBER_" + i]) {
 					_sKeyStroke += i.toString();
-					ApplicationData.getInstance().fileSize.value = parseInt(_sKeyStroke);
+					ApplicationData.getInstance().fileSize.value = parseInt(_sKeyStroke.substr(0,3));
 				}
 			}
 			
 			_tKeyStroke.reset();
 			_tKeyStroke.start();	
-		}
-		
-		private function onMouseRollOut(e:MouseEvent):void {			
-			determinDisplay();
-		}
-		
-		private function onMouseRollOver(e:MouseEvent):void {	
-			determinDisplay();
-		}		
+		}	
 		
 		private function determinDisplay():void {
 			
 			var mode:String = FILESIZE;
 			
-			if (mouseIsOver) {
+			if (hitTestPoint(stage.mouseX, stage.mouseY)) {
 				if (_si.isProcessing) {
 					mode = CANCEL_BATCH;
 				}		
