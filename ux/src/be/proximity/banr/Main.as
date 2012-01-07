@@ -39,10 +39,6 @@ package be.proximity.banr {
 		public var backlightRim:Backlight;
 		public var backlightBase:Backlight;
 		
-		public var color:Sprite;
-		public var cover:Sprite;
-		public var glass:Sprite;
-		
 		private var _si:SwfImaging;
 		
 		private var ir:ImagingRequest;
@@ -53,8 +49,7 @@ package be.proximity.banr {
 		}
 		
 		override protected function initComponent():void {
-			
-			color.mouseChildren = color.mouseEnabled = false;			
+				
 			
 			_si = new SwfImaging(10);			
 			
