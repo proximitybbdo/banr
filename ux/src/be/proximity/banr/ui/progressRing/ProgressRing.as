@@ -29,16 +29,15 @@ package be.proximity.banr.ui.progressRing {
 				
 				for (var i:int = 0; i < numChildren; i++) {		
 					
-					/* 
+					
 					//BUILD UP
+					/* 
 					if(((i / numChildren ) < data))
 						Animation.fadeIn(getChildByName("s" + (i+1)), (i) / numChildren);
 					else
 						Animation.fadeOut(getChildByName("s" + (i+1)));
 						
 					*/
-					//trace("s" + numChildren + " " + ((numChildren-i)) + " -> " + ((i) / (numChildren-1) ) + " < " + data);
-					
 					
 					//BUILD DOWN
 					if ((((i+1) / (numChildren) ) <= (data))) {
@@ -54,9 +53,7 @@ package be.proximity.banr.ui.progressRing {
 							Animation.fadeIn(getChildByName("s" + ((numChildren - i))));
 							_aSegmentsOn[i] = false;
 						}
-					}
-						
-					//*/50					
+					}				
 				}
 			}
 		}

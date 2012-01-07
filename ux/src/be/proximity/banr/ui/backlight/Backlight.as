@@ -3,9 +3,7 @@ package be.proximity.banr.ui.backlight {
 	import be.proximity.banr.swfImaging.events.SwfImagingEvent;
 	import be.proximity.banr.swfImaging.SwfImaging;
 	import be.proximity.banr.ui.helpers.Animation;
-	import flash.display.Sprite;
-	
-	import flash.display.BlendModeShader;
+	import flash.display.*;
 	import flash.display.shaders.*;
 
 	
@@ -21,24 +19,15 @@ package be.proximity.banr.ui.backlight {
 		
 		public function Backlight() {
 			super("backlight");
-			/*
-			var customBlendMode:BlendModeSoftlight  = new BlendModeSoftlight();
-			customBlendMode.multiply = 2; //exaggerates the blendmode effect by double
-			customBlendMode.alpha = 0.5; // reverts the blendmode effect 50% back to the source blending layer
-			*/
+			_aSegmentsOn = new Array(20);			
+			data = 1;
 			
 			mouseChildren = mouseEnabled = false;
-			blendShader = BlendModeShader.COLOR_DODGE;
-			
-			_aSegmentsOn = new Array(20);
-			
-			data = 1;
-
+			blendShader = BlendModeShader.COLOR_DODGE;			
 		}
 		
 		
-		override protected function render():void {
-			
+		override protected function render():void {			
 			if (data >= 0 ) {			
 				
 				for (var i:int = 0; i < 20; i++) {
@@ -76,8 +65,7 @@ package be.proximity.banr.ui.backlight {
 		private function onSwfImagingProgress(e:SwfImagingEvent):void {
 			data = _si.progress
 			
-		}
-		
+		}		
 		
 	}
 

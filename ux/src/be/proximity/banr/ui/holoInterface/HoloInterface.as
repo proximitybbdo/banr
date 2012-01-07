@@ -37,7 +37,7 @@ package be.proximity.banr.ui.holoInterface {
 		
 		private var _displayMode:String = CLEAR;
 		
-		
+		private var _mouseFocus:Boolean = false;
 		
 		public function HoloInterface() {
 			super("HoloInterface");
@@ -69,10 +69,12 @@ package be.proximity.banr.ui.holoInterface {
 		
 		private function onMouseLeave(e:Event):void {
 			trace("onMouseLeave");
+			_mouseFocus = false;
 			determinDisplay();
 		}
 		
 		private function onStageMouseMove(e:MouseEvent):void {
+			_mouseFocus = true;
 			determinDisplay();
 		}
 		
@@ -124,7 +126,7 @@ package be.proximity.banr.ui.holoInterface {
 			
 			var mode:String = FILESIZE;
 			
-			if (hitTestPoint(stage.mouseX, stage.mouseY)) {
+			if (hitTestPoint(stage.mouseX, stage.mouseY) && _mouseFocus) {
 				//trace("INSIDE INSIDE INSIDE INSIDE")
 				if (_si.isProcessing) {
 					mode = CANCEL_BATCH;
