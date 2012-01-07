@@ -22,6 +22,7 @@ package be.proximity.banr.swfImaging.imageEncoder {
 				case JPG :
 					//return new JpgEnc();
 					return new AsyncJpgEncoder();
+					//return new AsyncJpgEncTableCreator();
 				break;
 				/*
 				case PNG :

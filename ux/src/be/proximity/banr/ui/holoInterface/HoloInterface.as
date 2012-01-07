@@ -59,9 +59,16 @@ package be.proximity.banr.ui.holoInterface {
 			onFileSizeUpdate(null);
 			
 			btnClose.interactive = false;	
+			
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
+			stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave);
 			addEventListener(MouseEvent.CLICK, onMouseClick);		
 			
+			determinDisplay();
+		}
+		
+		private function onMouseLeave(e:Event):void {
+			trace("onMouseLeave");
 			determinDisplay();
 		}
 		
@@ -74,7 +81,7 @@ package be.proximity.banr.ui.holoInterface {
 		}		
 		
 		private function onSwfImagingProgress(e:SwfImagingEvent):void {
-			trace("onSwfImagingProgress " + _si.progress);	
+			//trace("onSwfImagingProgress " + _si.progress);	
 			progressRing.data = _si.progress;
 		}
 		
@@ -118,10 +125,13 @@ package be.proximity.banr.ui.holoInterface {
 			var mode:String = FILESIZE;
 			
 			if (hitTestPoint(stage.mouseX, stage.mouseY)) {
+				//trace("INSIDE INSIDE INSIDE INSIDE")
 				if (_si.isProcessing) {
 					mode = CANCEL_BATCH;
 				}		
-			}		
+			}else {
+				//trace("OUTSIDE OUTSIDE OUTSIDE OUTSIDE")
+			}
 			
 			updateDisplay(mode);			
 		}

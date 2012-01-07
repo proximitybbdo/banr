@@ -30,7 +30,7 @@ package be.proximity.banr.swfImaging {
 		private var _tBuffer:Timer;
 		private var _encodingStart:Date;
 		
-		private const DELAY:uint = 400;
+		private const DELAY:uint = 100;
 		
 		private var _totalToProcess:int = 0;
 		private var _progress:Number = 0;
@@ -58,7 +58,7 @@ package be.proximity.banr.swfImaging {
 				
 				_progress = (_totalToProcess - (_qInput.length + _qProcess.length )) / _totalToProcess;			
 				dispatchEvent(new SwfImagingEvent(SwfImagingEvent.PROGRESS));
-				trace("_progress " + _progress);
+				//trace("_progress " + _progress);
 				
 				if (_progress == 1) {
 					_isCompleted = true;
@@ -173,7 +173,7 @@ package be.proximity.banr.swfImaging {
 			
 			if (_currentEncoderSetting < ir.encodingSettings.length) {
 				
-				trace("SwfImaging, start encoding: " + _currentEncoderSetting);
+				//trace("SwfImaging, start encoding: " + _currentEncoderSetting);
 				
 				var es:EncodingSettings = ir.encodingSettings[_currentEncoderSetting];
 				
@@ -192,7 +192,7 @@ package be.proximity.banr.swfImaging {
 				
 			}else {
 				//finished encoding all encodingSettings for imagingRequest
-				trace("SwfImaging, imagingRequest encodingSettings processed");
+				//trace("SwfImaging, imagingRequest encodingSettings processed");
 				ir.destroy();
 				_isEncodingImagingRequest = false;
 				
