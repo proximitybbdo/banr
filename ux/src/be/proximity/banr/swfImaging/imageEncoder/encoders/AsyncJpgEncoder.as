@@ -62,7 +62,7 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 						_targetQuality = gestomateQuality(_baOutput.length, _settings.fileSize * 1024, _img.width, _img.height);		
 						trace("guessing targetQuality: " + _targetQuality);
 					}else if(MIN_QUALITY < _targetQuality){
-						_targetQuality--;
+						_targetQuality-= 5;
 						trace("lowering targetQuality: " + _targetQuality);					
 					}else {
 						trace("min targetQuality reached " + _targetQuality);	
@@ -83,7 +83,7 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 			}else {
 				_baInput.position = 0;
 				_baOutput = new ByteArray();
-				jpeglib.encodeAsync(function(){encodeNextPass()}, _baInput, _baOutput, _img.width, _img.height, _targetQuality, 3);
+				jpeglib.encodeAsync(function(){encodeNextPass()}, _baInput, _baOutput, _img.width, _img.height, _targetQuality, 20);
 			}
 			
 		}

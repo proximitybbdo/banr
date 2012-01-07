@@ -1,4 +1,5 @@
 package be.proximity.banr.ui.helpers {
+	import com.greensock.easing.Back;
 	import com.greensock.easing.Cubic;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
@@ -10,10 +11,10 @@ package be.proximity.banr.ui.helpers {
 	 */
 	public class Animation {
 		
-		public static const SCALE:Number = .098;
-		public static const BLUR:int = 60;
-		public static const BLUR_QUALITY:int = 1;
-		public static const SPEED:Number = .15;
+		public static const SCALE:Number = .66;
+		public static const BLUR:int = 10;
+		public static const BLUR_QUALITY:int = 2;
+		public static const SPEED:Number = .315;
 		
 		public function Animation() {
 			
@@ -40,8 +41,8 @@ package be.proximity.banr.ui.helpers {
 				o.filters = null;
 			}
 			
-			if(o.alpha != 0 )
-				TweenMax.to(o, SPEED, {ease:Cubic.easeIn, delay: delay, alpha:0, scaleX:SCALE, scaleY:SCALE, blurFilter: { blurX:BLUR, blurY:BLUR, quality:BLUR_QUALITY}});
+			if(o.alpha != 0)
+				TweenMax.to(o, SPEED, {ease:Back.easeIn, delay: delay, alpha:0, scaleX:SCALE, scaleY:SCALE, blurFilter: { blurX:BLUR, blurY:BLUR, quality:BLUR_QUALITY}});
 		}
 		
 	}
