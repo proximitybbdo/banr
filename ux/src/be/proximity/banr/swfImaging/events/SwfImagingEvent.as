@@ -7,6 +7,8 @@ package be.proximity.banr.swfImaging.events {
 	 */
 	public class SwfImagingEvent extends Event {
 		
+		public static const ADD:String = "add";
+		public static const REJECT:String = "reject";
 		public static const PROGRESS:String = "progress";
 		public static const COMPLETE:String = "complete";
 		

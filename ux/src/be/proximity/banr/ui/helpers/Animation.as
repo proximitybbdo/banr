@@ -29,7 +29,7 @@ package be.proximity.banr.ui.helpers {
 				o.filters = [new BlurFilter(BLUR, BLUR, BLUR_QUALITY)];
 			}
 			
-			if(o.alpha != 1)
+			//if(o.alpha != 1)
 				TweenMax.to(o, SPEED, {ease:Cubic.easeOut, delay: delay, alpha:1, scaleX:1, scaleY:1, blurFilter: { blurX:0, blurY:0, quality:BLUR_QUALITY}});
 		}
 		
@@ -41,7 +41,7 @@ package be.proximity.banr.ui.helpers {
 				o.filters = null;
 			}
 			
-			if(o.alpha != 0)
+			//if(o.alpha != 0)
 				TweenMax.to(o, SPEED, {ease:Cubic.easeIn, delay: delay, alpha:0, scaleX:SCALE, scaleY:SCALE, blurFilter: { blurX:BLUR, blurY:BLUR, quality:BLUR_QUALITY}});
 		}
 		

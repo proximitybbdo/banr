@@ -78,12 +78,16 @@ package be.proximity.banr.swfImaging {
 						
 							_totalToProcess = _qInput.length + _qProcess.length;
 							_isCompleted = false;
+							dispatchEvent(new SwfImagingEvent(SwfImagingEvent.ADD));
 							updateProgress();
 							
 							if (!_tBuffer.running) {
 								fillProcessQueue();
 								_tBuffer.start();
 							}
+						}else {
+							//file rejected
+							dispatchEvent(new SwfImagingEvent(SwfImagingEvent.REJECT));
 						}
 			
 			return ir;

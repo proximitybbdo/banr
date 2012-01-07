@@ -33,6 +33,8 @@ package be.proximity.banr {
 		//public var dd:DigitDisplay;
 		//public var turnButton:TurnButton;
 		//public var progressBar:ProgressBar;
+		public var glass:Sprite;
+		public var color:Sprite;
 		
 		public var hi:HoloInterface;
 		public var cornerLights:CornerLights;
@@ -49,39 +51,52 @@ package be.proximity.banr {
 		}
 		
 		override protected function initComponent():void {
-				
+			
+			glass.mouseEnabled = color.mouseEnabled = false;
 			
 			_si = new SwfImaging(10);			
 			
 			//initialise holo interface
 			hi.init(_si);			
 			
+			//initialise the backlight effects
 			backlightRim.init(_si);
 			backlightBase.init(_si, true);
+			
+			_si.addEventListener(SwfImagingEvent.COMPLETE, onSwfImagingComplete);
+			_si.addEventListener(SwfImagingEvent.ADD, onSwfImagingAdd);
 			
 			//register for the file drag events
 			addEventListener(NativeDragEvent.NATIVE_DRAG_ENTER, onDragIn);
 			addEventListener(NativeDragEvent.NATIVE_DRAG_DROP, onDragDrop);
 			addEventListener(NativeDragEvent.NATIVE_DRAG_EXIT, onDragExit);
-			addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
-			addEventListener(MouseEvent.MOUSE_OUT, onMouseOut, false, 0, true);
 			
+			//control filesize by mousewheel
+			addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false, 0, true);
+			addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+			stage.addEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);
+			
+			//drag the app around the desktop
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 		
+		private function onStageMouseLeave(e:Event):void {
+			
+		}
 		
+		private function onMouseMove(e:MouseEvent):void {
+			
+		}
 		
-		private function onMouseUp(e:MouseEvent):void {
-			//stage.nativeWindow.move();
+		private function onSwfImagingAdd(e:SwfImagingEvent):void {
+			
+		}
+		
+		private function onSwfImagingComplete(e:SwfImagingEvent):void {
 			
 		}
 		
 		private function onMouseDown(e:MouseEvent):void {
-			//stage.nativeWindow.minimize();
-			
-			//stage.nativeWindow.orderToFront();
-			//stage.nativeWindow.close();
 			stage.nativeWindow.startMove();
 		}
 		
@@ -89,9 +104,6 @@ package be.proximity.banr {
 			cornerLights.dimAll();
 		}
 		
-		private function onMouseOut(e:MouseEvent):void {
-			cornerLights.dimAll();
-		}
 		
 		private function onMouseWheel(e:MouseEvent):void {
 			if (e.delta > 0) {
@@ -110,8 +122,7 @@ package be.proximity.banr {
 			NativeDragManager.dropAction = NativeDragActions.COPY;
 			
 			var files:Object = e.clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT);
-			///*
-			//trace(typeof(files));
+			
 			for each (var f:File in files)
 				addFiles(f);
 				
@@ -123,9 +134,6 @@ package be.proximity.banr {
 				for each (var f:File in file.getDirectoryListing())
 					addFiles(f);
 			}else {
-				//_si.add(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value);
-				trace("ADD " + file);
-				//_si.add(new ImagingRequest(file, ApplicationData.getInstance().fileSize.valueStep, ApplicationData.getInstance().timing.value, [Encoders.JPG, Encoders.JPG, Encoders.JPG]));
 				_si.add(new ImagingRequest(file, ApplicationData.getInstance().timing.value, [/*new EncodingSettings(Encoders.PNG), */new EncodingSettings(Encoders.JPG, ApplicationData.getInstance().fileSize.valueStep)]));
 			}
 		}

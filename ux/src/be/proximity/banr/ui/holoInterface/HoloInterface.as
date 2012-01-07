@@ -9,10 +9,10 @@ package be.proximity.banr.ui.holoInterface {
 	import be.proximity.banr.ui.filesizeIndicator.FilesizeIndicator;
 	import be.proximity.banr.ui.helpers.Animation;
 	import be.proximity.banr.ui.progressRing.ProgressRing;
+	import flash.display.Sprite;
 	import flash.events.*;
 	import flash.geom.Point;
-	import flash.ui.Keyboard;
-	import flash.ui.Mouse;
+	import flash.ui.*;
 	import flash.utils.Timer;
 	
 	/**
@@ -24,12 +24,12 @@ package be.proximity.banr.ui.holoInterface {
 		public var filesizeIndicator:FilesizeIndicator;
 		public var progressRing:ProgressRing;
 		public var btnClose:CloseButton;
+		public var hit:Sprite;
 		
 		private var _si:SwfImaging;
 		
 		private var _tKeyStroke:Timer;
-		private var _sKeyStroke:String = "";
-		
+		private var _sKeyStroke:String = "";		
 		
 		public static const CLEAR:String = "clear";
 		public static const FILESIZE:String = "filesize";
@@ -125,8 +125,8 @@ package be.proximity.banr.ui.holoInterface {
 		private function determinDisplay():void {
 			
 			var mode:String = FILESIZE;
-			
-			if (hitTestPoint(stage.mouseX, stage.mouseY) && _mouseFocus) {
+			//hitTestPoint(stage.mouseX, stage.mouseY)
+			if (hit.hitTestPoint(stage.mouseX, stage.mouseY, true) && _mouseFocus) {
 				//trace("INSIDE INSIDE INSIDE INSIDE")
 				if (_si.isProcessing) {
 					mode = CANCEL_BATCH;
@@ -162,8 +162,7 @@ package be.proximity.banr.ui.holoInterface {
 						buttonMode = false;
 						Animation.fadeOut(btnClose);
 						Animation.fadeOut(filesizeIndicator);
-					break;
-					
+					break;					
 				}
 			}
 		}
