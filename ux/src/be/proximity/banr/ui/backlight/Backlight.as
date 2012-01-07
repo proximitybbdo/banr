@@ -16,6 +16,7 @@ package be.proximity.banr.ui.backlight {
 	public dynamic class Backlight extends BaseComponent {
 		
 		private var _si:SwfImaging;
+		private var _aSegmentsOn:Array;
 		public var innerShade:Sprite;
 		
 		public function Backlight() {
@@ -29,6 +30,8 @@ package be.proximity.banr.ui.backlight {
 			mouseChildren = mouseEnabled = false;
 			blendShader = BlendModeShader.COLOR_DODGE;
 			
+			_aSegmentsOn = new Array(20);
+			
 			data = 1;
 
 		}
@@ -39,12 +42,18 @@ package be.proximity.banr.ui.backlight {
 			if (data >= 0 ) {			
 				
 				for (var i:int = 0; i < 20; i++) {
-					//trace(getChildByName("s" + (i + 1)).name);
-					//getChildByName("s" + (20-i)).visible = (i/20 < data) ? false : true;
-					if (i / 20 < data) {
-						Animation.fadeOut(getChildByName("s" + (20 - i)));						
+					
+					if ((i + 1) / 20 <= data) {
+						if (!_aSegmentsOn[i]) {
+							Animation.fadeOut(getChildByName("s" + (20 - i)));
+							_aSegmentsOn[i] = true;
+						}						
 					}else {
-						Animation.fadeIn(getChildByName("s" + (20 - i)));
+						
+						if (_aSegmentsOn[i]) {
+							Animation.fadeIn(getChildByName("s" + (20 - i)));
+							_aSegmentsOn[i] = false;
+						}
 					}
 				}
 			}

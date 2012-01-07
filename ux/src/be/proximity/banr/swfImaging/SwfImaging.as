@@ -58,7 +58,7 @@ package be.proximity.banr.swfImaging {
 				
 				_progress = (_totalToProcess - (_qInput.length + _qProcess.length )) / _totalToProcess;			
 				dispatchEvent(new SwfImagingEvent(SwfImagingEvent.PROGRESS));
-				//trace("_progress " + _progress);
+				trace("_progress " + _progress);
 				
 				if (_progress == 1) {
 					_isCompleted = true;

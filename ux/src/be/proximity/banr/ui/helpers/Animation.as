@@ -14,7 +14,7 @@ package be.proximity.banr.ui.helpers {
 		public static const SCALE:Number = .66;
 		public static const BLUR:int = 10;
 		public static const BLUR_QUALITY:int = 2;
-		public static const SPEED:Number = .315;
+		public static const SPEED:Number = .15;
 		
 		public function Animation() {
 			
@@ -42,7 +42,7 @@ package be.proximity.banr.ui.helpers {
 			}
 			
 			if(o.alpha != 0)
-				TweenMax.to(o, SPEED, {ease:Back.easeIn, delay: delay, alpha:0, scaleX:SCALE, scaleY:SCALE, blurFilter: { blurX:BLUR, blurY:BLUR, quality:BLUR_QUALITY}});
+				TweenMax.to(o, SPEED, {ease:Cubic.easeIn, delay: delay, alpha:0, scaleX:SCALE, scaleY:SCALE, blurFilter: { blurX:BLUR, blurY:BLUR, quality:BLUR_QUALITY}});
 		}
 		
 	}

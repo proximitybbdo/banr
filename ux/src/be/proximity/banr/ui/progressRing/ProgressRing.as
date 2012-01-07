@@ -11,12 +11,12 @@ package be.proximity.banr.ui.progressRing {
 	 */
 	public dynamic class ProgressRing extends BaseComponent {
 		
-		private var aSegmentsOn:Array;
+		private var _aSegmentsOn:Array;
 		
 		public function ProgressRing() {
 			super("ProgressRing");
 			
-			aSegmentsOn = new Array(20);
+			_aSegmentsOn = new Array(20);
 			data = 1;
 		}		
 		
@@ -27,9 +27,7 @@ package be.proximity.banr.ui.progressRing {
 				
 				var animationDelay:int = 0;
 				
-				for (var i:int = 0; i < numChildren; i++) {
-					//trace(getChildByName("s" + (i)).name + " " + numChildren + " " + i + " " + data);
-					//	trace(((data /  numChildren) * i )+ " > " + data);					
+				for (var i:int = 0; i < numChildren; i++) {		
 					
 					/* 
 					//BUILD UP
@@ -43,18 +41,18 @@ package be.proximity.banr.ui.progressRing {
 					
 					
 					//BUILD DOWN
-					if ((((i) / (numChildren) ) < (data))) {
+					if ((((i+1) / (numChildren) ) <= (data))) {
 						
-						if (!aSegmentsOn[i]) {
+						if (!_aSegmentsOn[i]) {
 							Animation.fadeOut(getChildByName("s" + ((numChildren - i))), animationDelay * 0);
-							aSegmentsOn[i] = true;
+							_aSegmentsOn[i] = true;
 						}
 						
 						animationDelay++;
 					}else {
-						if (aSegmentsOn[i]) {
+						if (_aSegmentsOn[i]) {
 							Animation.fadeIn(getChildByName("s" + ((numChildren - i))));
-							aSegmentsOn[i] = false;
+							_aSegmentsOn[i] = false;
 						}
 					}
 						
