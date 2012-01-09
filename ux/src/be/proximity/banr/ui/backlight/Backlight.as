@@ -58,7 +58,7 @@ package be.proximity.banr.ui.backlight {
 		}
 		
 		private function onBlacklightEnterFrame(e:Event):void {
-			alpha = Math.random() * .5 + .5;
+			alpha = Math.random() * .2 + .8;
 		}
 		
 		private function onSwfImagingComplete(e:SwfImagingEvent):void {

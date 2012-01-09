@@ -32,6 +32,9 @@ package be.proximity.banr {
 		public var glass:Sprite;
 		public var color:Sprite;
 		
+		public var btnMinimize:SimpleButton;
+		public var btnClose:SimpleButton;
+		
 		public var hi:HoloInterface;
 		public var cornerLights:CornerLights;
 		public var backlightRim:Backlight;
@@ -43,12 +46,14 @@ package be.proximity.banr {
 		
 		
 		public function Main():void {
-			super("main");			
+			super("main");	
+			
 		}
 		
 		override protected function initComponent():void {
 			
 			glass.mouseEnabled = color.mouseEnabled = false;
+			
 			
 			_si = new SwfImaging(10);			
 			
@@ -59,20 +64,37 @@ package be.proximity.banr {
 			backlightRim.init(_si);
 			backlightBase.init(_si, true);
 			
+			
+			
 			_si.addEventListener(SwfImagingEvent.COMPLETE, onSwfImagingComplete);
-			_si.addEventListener(SwfImagingEvent.ADD, onSwfImagingAdd);
-			
-			
+			_si.addEventListener(SwfImagingEvent.ADD, onSwfImagingAdd);			
 			
 			//control filesize by mousewheel
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
 			stage.addEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);
 			
-			//drag the app around the desktop
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);			
+						
 			
 			stage.nativeWindow.addEventListener(NativeWindowBoundsEvent.MOVING, onNativeWindowMoving);
+			
+			/*
+			*/
+			
+			btnMinimize.addEventListener(MouseEvent.CLICK, onBtnMiniMizeClick);
+			btnClose.addEventListener(MouseEvent.CLICK, onBtnCloseClick);
+			
+			//drag the app around the desktop
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+			
+		}
+		
+		private function onBtnCloseClick(e:MouseEvent):void {
+			stage.nativeWindow.close();
+		}
+		
+		private function onBtnMiniMizeClick(e:MouseEvent):void {
+			stage.nativeWindow.minimize();
 		}
 		
 		private function onNativeWindowMoving(e:NativeWindowBoundsEvent):void {
@@ -98,10 +120,7 @@ package be.proximity.banr {
 		
 		private function onStageMouseDown(e:MouseEvent):void {
 			stage.nativeWindow.startMove();
-		}
-		
-		
-		
+		}		
 		
 		private function onMouseWheel(e:MouseEvent):void {
 			var step:int = ApplicationData.getInstance().fileSize.value;

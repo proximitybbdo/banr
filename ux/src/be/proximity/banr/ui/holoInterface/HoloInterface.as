@@ -83,7 +83,6 @@ package be.proximity.banr.ui.holoInterface {
 			addEventListener(MouseEvent.CLICK, onMouseClick);		
 			
 			handleDisplay();
-			
 		}
 		
 		private function onMouseLeave(e:Event):void {
@@ -93,7 +92,7 @@ package be.proximity.banr.ui.holoInterface {
 		
 		private function onStageMouseMove(e:MouseEvent):void {
 			_mouseFocus = true;
-			//handleDisplay();
+			handleDisplay();
 		}
 		
 		private function onMouseClick(e:MouseEvent):void {
