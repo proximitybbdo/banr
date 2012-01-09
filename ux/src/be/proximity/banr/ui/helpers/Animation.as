@@ -12,9 +12,9 @@ package be.proximity.banr.ui.helpers {
 	public class Animation {
 		
 		public static const SCALE:Number = .66;
-		public static const BLUR:int = 10;
+		public static const BLUR:int = 20;
 		public static const BLUR_QUALITY:int = 2;
-		public static const SPEED:Number = .15;
+		public static const SPEED:Number = .12;
 		
 		public function Animation() {
 			

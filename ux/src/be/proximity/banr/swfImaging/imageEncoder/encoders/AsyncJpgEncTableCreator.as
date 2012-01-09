@@ -38,7 +38,6 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 			_jpegQuality = 100;
 			
 			_aCollection = new Array();
-				
 			
 			encodeNext();
 		}

@@ -1,16 +1,22 @@
 package be.proximity.banr.ui.holoInterface {
-	import be.dreem.ui.components.form.BaseComponent;
+	import be.dreem.ui.components.form.*;
 	import be.dreem.ui.components.form.buttons.AbstractPushButton;
 	import be.dreem.ui.components.form.events.*;
 	import be.proximity.banr.applicationData.ApplicationData;
 	import be.proximity.banr.swfImaging.events.*;
+	import be.proximity.banr.swfImaging.imageEncoder.Encoders;
+	import be.proximity.banr.swfImaging.imageEncoder.EncodingSettings;
+	import be.proximity.banr.swfImaging.ImagingRequest;
 	import be.proximity.banr.swfImaging.SwfImaging;
-	import be.proximity.banr.ui.buttons.CloseButton;
-	import be.proximity.banr.ui.filesizeIndicator.FilesizeIndicator;
 	import be.proximity.banr.ui.helpers.Animation;
+	import be.proximity.banr.ui.holoInterface.modes.*;
 	import be.proximity.banr.ui.progressRing.ProgressRing;
+	import flash.desktop.ClipboardFormats;
+	import flash.desktop.NativeDragActions;
+	import flash.desktop.NativeDragManager;
 	import flash.display.Sprite;
 	import flash.events.*;
+	import flash.filesystem.File;
 	import flash.geom.Point;
 	import flash.ui.*;
 	import flash.utils.Timer;
@@ -21,10 +27,14 @@ package be.proximity.banr.ui.holoInterface {
 	 */
 	public class HoloInterface extends AbstractPushButton {
 		
-		public var filesizeIndicator:FilesizeIndicator;
-		public var progressRing:ProgressRing;
-		public var btnClose:CloseButton;
 		public var hit:Sprite;
+		
+		public var filesizeMode:FilesizeMode;
+		public var cancelationMode:CancelationMode;
+		public var dropFileMode:DropFileMode;
+		
+		public var progressRing:ProgressRing;
+		
 		
 		private var _si:SwfImaging;
 		
@@ -34,10 +44,12 @@ package be.proximity.banr.ui.holoInterface {
 		public static const CLEAR:String = "clear";
 		public static const FILESIZE:String = "filesize";
 		public static const CANCEL_BATCH:String = "cancelBatch";
+		public static const DROP_FILE:String = "dropFile";
 		
 		private var _displayMode:String = CLEAR;
 		
 		private var _mouseFocus:Boolean = false;
+		private var _dragFiles:Boolean = false;
 		
 		public function HoloInterface() {
 			super("HoloInterface");
@@ -58,24 +70,30 @@ package be.proximity.banr.ui.holoInterface {
 			
 			onFileSizeUpdate(null);
 			
-			btnClose.interactive = false;	
+			cancelationMode.interactive = false;	
 			
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
 			stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave);
+			
+			//register for the file drag events
+			stage.addEventListener(NativeDragEvent.NATIVE_DRAG_ENTER, onDragIn);
+			stage.addEventListener(NativeDragEvent.NATIVE_DRAG_DROP, onDragDrop);
+			stage.addEventListener(NativeDragEvent.NATIVE_DRAG_EXIT, onDragExit);
+			
 			addEventListener(MouseEvent.CLICK, onMouseClick);		
 			
-			determinDisplay();
+			handleDisplay();
+			
 		}
 		
 		private function onMouseLeave(e:Event):void {
-			trace("onMouseLeave");
 			_mouseFocus = false;
-			determinDisplay();
+			handleDisplay();
 		}
 		
 		private function onStageMouseMove(e:MouseEvent):void {
 			_mouseFocus = true;
-			determinDisplay();
+			//handleDisplay();
 		}
 		
 		private function onMouseClick(e:MouseEvent):void {
@@ -89,12 +107,12 @@ package be.proximity.banr.ui.holoInterface {
 		
 		
 		private function onFileSizeUpdate(e:ComponentDataEvent):void {
-			filesizeIndicator.data =  ApplicationData.getInstance().fileSize.valueStep;			 
+			filesizeMode.data =  ApplicationData.getInstance().fileSize.valueStep;			 
 		}
 		
 		private function onSwfImagingComplete(e:SwfImagingEvent):void {
 			stage.nativeWindow.notifyUser("Finished!");
-			determinDisplay();
+			handleDisplay();
 		}
 		
 		private function onKeyStrokeTimer(e:TimerEvent):void {
@@ -122,19 +140,21 @@ package be.proximity.banr.ui.holoInterface {
 			_tKeyStroke.start();	
 		}	
 		
-		private function determinDisplay():void {
+		private function handleDisplay():void {
 			
 			var mode:String = FILESIZE;
-			//hitTestPoint(stage.mouseX, stage.mouseY)
-			if (hit.hitTestPoint(stage.mouseX, stage.mouseY, true) && _mouseFocus) {
-				//trace("INSIDE INSIDE INSIDE INSIDE")
+			
+			if (_dragFiles) {
+				trace("YES");
+				mode = DROP_FILE;				
+			}else if (hit.hitTestPoint(stage.mouseX, stage.mouseY, true) && _mouseFocus) {
+				trace("WTF");
 				if (_si.isProcessing) {
 					mode = CANCEL_BATCH;
 				}		
-			}else {
-				//trace("OUTSIDE OUTSIDE OUTSIDE OUTSIDE")
 			}
 			
+			trace(mode);
 			updateDisplay(mode);			
 		}
 		
@@ -147,21 +167,31 @@ package be.proximity.banr.ui.holoInterface {
 				switch(mode) {
 					
 					case FILESIZE :
-						buttonMode = false;
-						Animation.fadeIn(filesizeIndicator);
-						Animation.fadeOut(btnClose);
+						interactive = false;
+						Animation.fadeIn(filesizeMode);
+						Animation.fadeOut(cancelationMode);
+						Animation.fadeOut(dropFileMode);
 					break;					
 					
 					case CANCEL_BATCH :
-						buttonMode = true;
-						Animation.fadeIn(btnClose);
-						Animation.fadeOut(filesizeIndicator);
+						interactive = true;
+						Animation.fadeOut(filesizeMode);
+						Animation.fadeIn(cancelationMode);
+						Animation.fadeOut(dropFileMode);
+					break;
+					
+					case DROP_FILE :
+						interactive = false;
+						Animation.fadeOut(filesizeMode);
+						Animation.fadeOut(cancelationMode);
+						Animation.fadeIn(dropFileMode);
 					break;
 					
 					case CLEAR :
 						buttonMode = false;
-						Animation.fadeOut(btnClose);
-						Animation.fadeOut(filesizeIndicator);
+						Animation.fadeOut(filesizeMode);
+						Animation.fadeOut(cancelationMode);
+						Animation.fadeOut(dropFileMode);
 					break;					
 				}
 			}
@@ -172,6 +202,43 @@ package be.proximity.banr.ui.holoInterface {
 		}
 		
 		
+		
+		//FILE DROP
+		public function onDragIn(e:NativeDragEvent):void{
+			_dragFiles = true;
+			NativeDragManager.acceptDragDrop(stage);
+			//cornerLights.lightAll();
+			handleDisplay();
+		}
+
+		public function onDragDrop(e:NativeDragEvent):void{
+			NativeDragManager.dropAction = NativeDragActions.COPY;
+			
+			var files:Object = e.clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT);
+			
+			for each (var f:File in files)
+				addFiles(f);
+			
+			_dragFiles = false;
+			handleDisplay();
+			//cornerLights.dimAll();
+		}
+		
+		private function onDragExit(e:NativeDragEvent):void {
+			//cornerLights.dimAll();
+			_dragFiles = false;
+			
+			handleDisplay();
+		}
+		
+		private function addFiles(file:File):void {
+			if (file.isDirectory) {
+				for each (var f:File in file.getDirectoryListing())
+					addFiles(f);
+			}else {
+				_si.add(new ImagingRequest(file, ApplicationData.getInstance().timing.value, [/*new EncodingSettings(Encoders.PNG), */new EncodingSettings(Encoders.JPG, ApplicationData.getInstance().fileSize.valueStep)]));
+			}
+		}
 	}
 
 }

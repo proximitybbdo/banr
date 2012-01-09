@@ -5,6 +5,7 @@ package be.proximity.banr.ui.backlight {
 	import be.proximity.banr.ui.helpers.Animation;
 	import flash.display.*;
 	import flash.display.shaders.*;
+	import flash.events.Event;
 
 	
 	/**
@@ -26,7 +27,6 @@ package be.proximity.banr.ui.backlight {
 			blendShader = BlendModeShader.COLOR_DODGE;			
 		}
 		
-		
 		override protected function render():void {			
 			if (data >= 0 ) {			
 				
@@ -37,12 +37,9 @@ package be.proximity.banr.ui.backlight {
 							Animation.fadeOut(getChildByName("s" + (20 - i)));
 							_aSegmentsOn[i] = true;
 						}						
-					}else {
-						
-						if (_aSegmentsOn[i]) {
-							Animation.fadeIn(getChildByName("s" + (20 - i)));
-							_aSegmentsOn[i] = false;
-						}
+					}else if (_aSegmentsOn[i]) {
+						Animation.fadeIn(getChildByName("s" + (20 - i)));
+						_aSegmentsOn[i] = false;
 					}
 				}
 			}
@@ -56,6 +53,12 @@ package be.proximity.banr.ui.backlight {
 			
 			_si.addEventListener(SwfImagingEvent.PROGRESS, onSwfImagingProgress, false, 0, true);
 			_si.addEventListener(SwfImagingEvent.COMPLETE, onSwfImagingComplete, false, 0, true);
+			
+			addEventListener(Event.ENTER_FRAME, onBlacklightEnterFrame);
+		}
+		
+		private function onBlacklightEnterFrame(e:Event):void {
+			alpha = Math.random() * .5 + .5;
 		}
 		
 		private function onSwfImagingComplete(e:SwfImagingEvent):void {
