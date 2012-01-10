@@ -2,6 +2,7 @@ package be.proximity.banr.ui.cornerLights {
 	import be.dreem.ui.components.form.BaseComponent;
 	import be.proximity.banr.ui.helpers.Animation;
 	import flash.display.Sprite;
+	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 	
 	/**
@@ -19,6 +20,8 @@ package be.proximity.banr.ui.cornerLights {
 		
 		private var _aLightsOn:Array;
 		
+		private var _t:int = 0;
+		
 		public function CornerLights() {
 			_aLightsOn = new Array(4);
 		}
@@ -28,9 +31,12 @@ package be.proximity.banr.ui.cornerLights {
 		}
 		
 		public function setLights(lights:Array):void {			
+			_blink = false;
+			clearTimeout(_t);
+			
 			for (var i:int = 0; i < 4 && i < lights.length; i++) {
 				controlLight(i, lights[i] as Boolean);
-			}
+			}		
 		}
 		
 		public function lightAll():void {			
@@ -61,18 +67,15 @@ package be.proximity.banr.ui.cornerLights {
 		}
 		
 		private function blinkLoop():void {
-			//lightAll();
-			///*
 			if(!_aLightsOn[0])
 				lightAll();
 			else
 				dimAll();
 			
 			if(_blink)
-				setTimeout(blinkLoop, 1000);
+				_t = setTimeout(blinkLoop, 1000);
 			else
 				dimAll();
-			//*/
 		}
 	}
 

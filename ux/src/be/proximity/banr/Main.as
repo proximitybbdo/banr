@@ -3,6 +3,7 @@ package be.proximity.banr {
 	import be.dreem.ui.components.form.BaseComponent;
 	import be.dreem.ui.components.form.events.ComponentDataEvent;
 	import be.dreem.ui.components.form.events.ComponentInteractiveEvent;
+	import be.proximity.banr.ui.holoInterface.events.HoloInterfaceEvent;
 	
 	import be.proximity.banr.applicationData.ApplicationData;
 	import be.proximity.banr.swfImaging.*;
@@ -52,41 +53,54 @@ package be.proximity.banr {
 		
 		override protected function initComponent():void {
 			
-			glass.mouseEnabled = color.mouseEnabled = false;
+			glass.mouseEnabled = color.mouseEnabled = false;			
 			
-			
-			_si = new SwfImaging(10);			
+			_si = new SwfImaging(15);			
 			
 			//initialise holo interface
 			hi.init(_si);			
 			
 			//initialise the backlight effects
 			backlightRim.init(_si);
-			backlightBase.init(_si, true);
-			
-			
-			
-			_si.addEventListener(SwfImagingEvent.COMPLETE, onSwfImagingComplete);
-			_si.addEventListener(SwfImagingEvent.ADD, onSwfImagingAdd);			
+			backlightBase.init(_si, true);		
+				
 			
 			//control filesize by mousewheel
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+			
+			//hi
+			hi.addEventListener(HoloInterfaceEvent.MODE_CHANGE, onHiModeChange);
+			
+			//corner lights
+			_si.addEventListener(SwfImagingEvent.COMPLETE, onSwfImagingComplete);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onStageMouseMove);
-			stage.addEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);
 			
-						
-			
-			stage.nativeWindow.addEventListener(NativeWindowBoundsEvent.MOVING, onNativeWindowMoving);
-			
-			/*
-			*/
-			
+			//native window functions
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
 			btnMinimize.addEventListener(MouseEvent.CLICK, onBtnMiniMizeClick);
 			btnClose.addEventListener(MouseEvent.CLICK, onBtnCloseClick);
-			
-			//drag the app around the desktop
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
-			
+			stage.nativeWindow.addEventListener(NativeWindowBoundsEvent.MOVING, onNativeWindowMoving);
+		}
+		
+		private function onStageMouseMove(e:MouseEvent):void {
+			cornerLights.blinkStop();
+		}
+		
+		private function onSwfImagingComplete(e:SwfImagingEvent):void {
+			cornerLights.blinkStart();
+		}
+		
+		private function onHiModeChange(e:HoloInterfaceEvent):void {
+			switch(hi.displayMode) {
+				
+				case HoloInterface.DROP_FILE :
+					cornerLights.lightAll();
+				break;
+				
+				default :
+					cornerLights.dimAll();
+				break;
+			}
 		}
 		
 		private function onBtnCloseClick(e:MouseEvent):void {
@@ -101,23 +115,6 @@ package be.proximity.banr {
 			//hi.x = 	stage.nativeWindow.width;
 		}
 		
-		private function onStageMouseLeave(e:Event):void {
-			
-		}
-		
-		private function onStageMouseMove(e:MouseEvent):void {
-			
-		}
-		
-		private function onSwfImagingAdd(e:SwfImagingEvent):void {
-			
-		}
-		
-		private function onSwfImagingComplete(e:SwfImagingEvent):void {
-		
-			
-		}
-		
 		private function onStageMouseDown(e:MouseEvent):void {
 			stage.nativeWindow.startMove();
 		}		
@@ -130,8 +127,5 @@ package be.proximity.banr {
 			
 			ApplicationData.getInstance().fileSize.value = step;
 		}		
-		
-		
-	}
-	
+	}	
 }

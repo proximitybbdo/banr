@@ -9,6 +9,7 @@ package be.proximity.banr.ui.holoInterface {
 	import be.proximity.banr.swfImaging.ImagingRequest;
 	import be.proximity.banr.swfImaging.SwfImaging;
 	import be.proximity.banr.ui.helpers.Animation;
+	import be.proximity.banr.ui.holoInterface.events.HoloInterfaceEvent;
 	import be.proximity.banr.ui.holoInterface.modes.*;
 	import be.proximity.banr.ui.progressRing.ProgressRing;
 	import flash.desktop.ClipboardFormats;
@@ -144,16 +145,13 @@ package be.proximity.banr.ui.holoInterface {
 			var mode:String = FILESIZE;
 			
 			if (_dragFiles) {
-				trace("YES");
 				mode = DROP_FILE;				
 			}else if (hit.hitTestPoint(stage.mouseX, stage.mouseY, true) && _mouseFocus) {
-				trace("WTF");
 				if (_si.isProcessing) {
 					mode = CANCEL_BATCH;
 				}		
 			}
 			
-			trace(mode);
 			updateDisplay(mode);			
 		}
 		
@@ -193,14 +191,14 @@ package be.proximity.banr.ui.holoInterface {
 						Animation.fadeOut(dropFileMode);
 					break;					
 				}
+				
+				dispatchEvent(new HoloInterfaceEvent(HoloInterfaceEvent.MODE_CHANGE));
 			}
 		}
 		
 		public function get displayMode():String {
 			return _displayMode;
-		}
-		
-		
+		}		
 		
 		//FILE DROP
 		public function onDragIn(e:NativeDragEvent):void{

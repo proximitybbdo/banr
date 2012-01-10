@@ -54,10 +54,12 @@ package be.proximity.banr.ui.backlight {
 			_si.addEventListener(SwfImagingEvent.PROGRESS, onSwfImagingProgress, false, 0, true);
 			_si.addEventListener(SwfImagingEvent.COMPLETE, onSwfImagingComplete, false, 0, true);
 			
-			addEventListener(Event.ENTER_FRAME, onBlacklightEnterFrame);
+			
+			//addEventListener(Event.ENTER_FRAME, onBlacklightEnterFrame);
 		}
 		
 		private function onBlacklightEnterFrame(e:Event):void {
+			//very imporfarment, UI lags
 			alpha = Math.random() * .2 + .8;
 		}
 		

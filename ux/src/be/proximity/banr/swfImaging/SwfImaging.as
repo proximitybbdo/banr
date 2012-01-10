@@ -50,8 +50,7 @@ package be.proximity.banr.swfImaging {
 			_qProcess = new Array();
 			
 			_tBuffer = new Timer(500);
-			_tBuffer.addEventListener(TimerEvent.TIMER, onBufferTimer, false, 0, true);
-			
+			_tBuffer.addEventListener(TimerEvent.TIMER, onBufferTimer, false, 0, true);			
 		}
 		
 		private function updateProgress():void {			
