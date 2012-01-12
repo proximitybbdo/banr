@@ -80,6 +80,7 @@ package be.proximity.banr {
 			btnMinimize.addEventListener(MouseEvent.CLICK, onBtnMiniMizeClick);
 			btnClose.addEventListener(MouseEvent.CLICK, onBtnCloseClick);
 			stage.nativeWindow.addEventListener(NativeWindowBoundsEvent.MOVING, onNativeWindowMoving);
+			stage.nativeWindow.alwaysInFront = true;
 		}
 		
 		private function onStageMouseMove(e:MouseEvent):void {
