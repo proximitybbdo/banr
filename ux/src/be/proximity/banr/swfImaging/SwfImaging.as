@@ -53,9 +53,9 @@ package be.proximity.banr.swfImaging {
 			_tBuffer.addEventListener(TimerEvent.TIMER, onBufferTimer, false, 0, true);			
 		}
 		
-		private function updateProgress():void {			
-			if (_totalToProcess) {
-				
+		private function updateProgress():void {
+			
+			if (_totalToProcess) {				
 				_progress = (_totalToProcess - (_qInput.length + _qProcess.length )) / _totalToProcess;			
 				dispatchEvent(new SwfImagingEvent(SwfImagingEvent.PROGRESS));
 				
@@ -87,8 +87,7 @@ package be.proximity.banr.swfImaging {
 						}else {
 							//file rejected
 							dispatchEvent(new SwfImagingEvent(SwfImagingEvent.REJECT));
-						}
-			
+						}			
 			return ir;
 		}
 		
@@ -116,7 +115,7 @@ package be.proximity.banr.swfImaging {
 		}
 		
 		/**
-		 * remove the complete queue. The current request will be processed.
+		 * remove the complete queue. The current request will still be processed.
 		 */
 		public function clearQueue():void {
 			 
@@ -161,7 +160,6 @@ package be.proximity.banr.swfImaging {
 					}
 					
 				}else {
-					//stopEncoding();
 					trace("SwfImaging, all encoding finished");
 				}
 		}
@@ -184,28 +182,17 @@ package be.proximity.banr.swfImaging {
 				_ir = ir;
 				_enc.encode(ir.image, es, function(){onEncodingComplete()});
 				
-				
-				/*
-				var ba:ByteArray = .encode(ir.image, es);				
-				
-				_currentEncoderSetting++;
-				
-				setTimeout(saveToFile, DELAY, ir, ba, es);
-				*/
-				
 			}else {
 				//finished encoding all encodingSettings for imagingRequest
 				//trace("SwfImaging, imagingRequest encodingSettings processed");
 				ir.destroy();
-				_isEncodingImagingRequest = false;
-				
+				_isEncodingImagingRequest = false;				
 				
 				encodeNextImagingRequest();
 			}
 		}
 		
-		public function onEncodingComplete():void {				
-					
+		public function onEncodingComplete():void {					
 				//_enc.destroy();
 				setTimeout(saveToFile, DELAY, _ir, _enc.output, _ir.encodingSettings[_currentEncoderSetting]);
 		}		
@@ -213,6 +200,10 @@ package be.proximity.banr.swfImaging {
 		private function saveToFile(ir:ImagingRequest, encoded:ByteArray, es:EncodingSettings):void {
 			//trace("SwfImaging, saveToFile()");
 			///*
+			
+			//bad code
+			_enc.destroy();
+			
 			var f:File = new File(ir.file.nativePath);
 			
 			if(f.extension == null){
@@ -226,6 +217,9 @@ package be.proximity.banr.swfImaging {
 			fs.writeBytes(encoded,  0, encoded.length);
 			fs.close();
 			//*/
+			
+			f = null;
+			fs = null;
 			
 			_currentEncoderSetting++;
 			setTimeout(encodeNextSetting, DELAY, ir);

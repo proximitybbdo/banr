@@ -24,7 +24,7 @@ package be.proximity.banr.ui.backlight {
 			data = 1;
 			
 			mouseChildren = mouseEnabled = false;
-			blendShader = BlendModeShader.COLOR_DODGE;			
+			blendShader = BlendModeShader.COLOR_DODGE;	
 		}
 		
 		override protected function render():void {			
@@ -50,7 +50,8 @@ package be.proximity.banr.ui.backlight {
 			
 			if (!innerShading)
 				removeChild(innerShade);
-			
+				
+				
 			_si.addEventListener(SwfImagingEvent.PROGRESS, onSwfImagingProgress, false, 0, true);
 			_si.addEventListener(SwfImagingEvent.COMPLETE, onSwfImagingComplete, false, 0, true);
 			

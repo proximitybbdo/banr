@@ -114,14 +114,16 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 												.060,
 												.058,
 												.058
-											];		
+											];	
+											
+											
+		private var _baOutput:ByteArray;
 		
 		public function JpgEnc() {
 			
 		}
 		
-		
-		public function encode(img:BitmapData, settings:EncodingSettings):ByteArray {			
+		public function encode(img:BitmapData, settings:EncodingSettings, callbackComplete:Function):void {			
 			
 			var targetQuality:Number = 100;
 			var e:JPGEncoder = new JPGEncoder(targetQuality);
@@ -157,7 +159,9 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 			
 			//trace("JPG ENCODED");
 			
-			return b;
+			_baOutput = b;
+			
+			callbackComplete.call();
 		}
 		
 		
@@ -174,9 +178,7 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 			trace("desiredFileSize " + desiredFileSize);
 			
 			//a full noise image of 800x800 gives a pixelDetail around 4.1
-			//think 
-			
-			
+			//think 			
 			
 			for (var i:int = 0; i < _jpgCompressionTable.length; i++) {
 				//trace("q = " + (compressionRatio * saveMargin * (1/pixelDetail)) +" > " + _jpgCompressionTable[i]);
@@ -187,6 +189,14 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 			}
 			
 			return 5;
+		}
+		
+		public function destroy():void {
+			_baOutput = null;
+		}
+		
+		public function get output():ByteArray {
+			return _baOutput;
 		}
 		
 	}

@@ -4,6 +4,7 @@ package be.proximity.banr {
 	import be.dreem.ui.components.form.events.ComponentDataEvent;
 	import be.dreem.ui.components.form.events.ComponentInteractiveEvent;
 	import be.proximity.banr.ui.holoInterface.events.HoloInterfaceEvent;
+	import flash.system.Capabilities;
 	
 	import be.proximity.banr.applicationData.ApplicationData;
 	import be.proximity.banr.swfImaging.*;
@@ -62,8 +63,7 @@ package be.proximity.banr {
 			
 			//initialise the backlight effects
 			backlightRim.init(_si);
-			backlightBase.init(_si, true);		
-				
+			backlightBase.init(_si, true);				
 			
 			//control filesize by mousewheel
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
@@ -80,11 +80,12 @@ package be.proximity.banr {
 			btnMinimize.addEventListener(MouseEvent.CLICK, onBtnMiniMizeClick);
 			btnClose.addEventListener(MouseEvent.CLICK, onBtnCloseClick);
 			stage.nativeWindow.addEventListener(NativeWindowBoundsEvent.MOVING, onNativeWindowMoving);
-			stage.nativeWindow.alwaysInFront = true;
+			//stage.nativeWindow.alwaysInFront = true;
 		}
 		
 		private function onStageMouseMove(e:MouseEvent):void {
-			cornerLights.blinkStop();
+			cornerLights.blinkStop();			
+			//trace(Capabilities.os.toLowerCase().indexOf("mac"));
 		}
 		
 		private function onSwfImagingComplete(e:SwfImagingEvent):void {
@@ -92,8 +93,7 @@ package be.proximity.banr {
 		}
 		
 		private function onHiModeChange(e:HoloInterfaceEvent):void {
-			switch(hi.displayMode) {
-				
+			switch(hi.displayMode) {				
 				case HoloInterface.DROP_FILE :
 					cornerLights.lightAll();
 				break;

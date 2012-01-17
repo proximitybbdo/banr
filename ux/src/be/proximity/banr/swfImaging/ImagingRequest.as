@@ -87,7 +87,7 @@ package be.proximity.banr.swfImaging {
 		private function createImage():void {			
 			_image = new BitmapData(_l.contentLoaderInfo.width, _l.contentLoaderInfo.height, true);
 			_image.draw(_l.contentLoaderInfo.content);
-			
+			//_l.close();
 			///*
 			_isProcessing = false;
 			_isProcessed = true;			
@@ -127,12 +127,14 @@ package be.proximity.banr.swfImaging {
 		private function reset():void {
 			if (_l) {
 				_l.removeEventListener(Event.COMPLETE, onLoadComplete);
-				_l.removeEventListener(IOErrorEvent.IO_ERROR, onIOError);
+				_l.removeEventListener(IOErrorEvent.IO_ERROR, onIOError);			
+				_l.unload();
 			}
 			
 			if (_sp) {
 				_sp.removeEventListener(Event.ENTER_FRAME, onSpEnterFrame, false);
 			}
+			
 			
 			_l = null;
 			_image = null;	
@@ -141,7 +143,9 @@ package be.proximity.banr.swfImaging {
 		
 		public function destroy():void {
 			reset();	
-			_file = null;				
+			_file = null;			
+			_encodingSettings = null;
+			_output = null;
 		}
 		
 	}

@@ -60,12 +60,12 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 					
 					if(_targetQuality == 100){
 						_targetQuality = gestomateQuality(_baOutput.length, _settings.fileSize * 1024, _img.width, _img.height);		
-						trace("guessing targetQuality: " + _targetQuality);
+						//trace("guessing targetQuality: " + _targetQuality);
 					}else if(MIN_QUALITY < _targetQuality){
 						_targetQuality-= 5;
-						trace("lowering targetQuality: " + _targetQuality);					
+						//trace("lowering targetQuality: " + _targetQuality);					
 					}else {
-						trace("min targetQuality reached " + _targetQuality);	
+						//trace("min targetQuality reached " + _targetQuality);	
 						bTargetted = true;	
 					}
 					
@@ -75,11 +75,8 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 				
 			}
 			
-			
-			
-			if (bTargetted) {
-				
-				_callbackComplete.call();
+			if (bTargetted) {	
+					_callbackComplete.call();
 			}else {
 				_baInput.position = 0;
 				_baOutput = new ByteArray();
@@ -108,7 +105,11 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 		}
 		
 		public function destroy():void {
+			_baInput = null;
 			_baOutput = null;
+			_img = null;
+			_callbackComplete = null;
+			_settings = null;
 		}
 		
 		public function get output():ByteArray {

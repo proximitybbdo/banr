@@ -105,7 +105,6 @@ package be.proximity.banr.ui.holoInterface {
 			progressRing.data = _si.progress;
 		}
 		
-		
 		private function onFileSizeUpdate(e:ComponentDataEvent):void {
 			filesizeMode.data =  ApplicationData.getInstance().fileSize.valueStep;			 
 		}

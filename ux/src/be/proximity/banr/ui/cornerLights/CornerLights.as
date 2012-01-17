@@ -31,19 +31,18 @@ package be.proximity.banr.ui.cornerLights {
 		}
 		
 		public function setLights(lights:Array):void {			
-			_blink = false;
-			clearTimeout(_t);
-			
 			for (var i:int = 0; i < 4 && i < lights.length; i++) {
 				controlLight(i, lights[i] as Boolean);
 			}		
 		}
 		
-		public function lightAll():void {			
+		public function lightAll():void {	
+			clearBlink();
 			setLights([true, true, true, true]);
 		}
 		
 		public function dimAll():void {
+			clearBlink();
 			setLights([false, false, false, false]);
 		}
 		
@@ -63,19 +62,25 @@ package be.proximity.banr.ui.cornerLights {
 		}
 		
 		public function blinkStop():void {
-			_blink = false;
+			//_blink = false;
+			dimAll();
 		}
 		
 		private function blinkLoop():void {
 			if(!_aLightsOn[0])
-				lightAll();
+				setLights([true, true, true, true]);
 			else
-				dimAll();
+				setLights([false, false, false, false]);
 			
 			if(_blink)
 				_t = setTimeout(blinkLoop, 1000);
 			else
-				dimAll();
+				setLights([false, false, false, false]);
+		}
+		
+		private function clearBlink():void {
+			_blink = false;
+			clearTimeout(_t);
 		}
 	}
 
