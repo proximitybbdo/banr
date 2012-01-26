@@ -51,6 +51,7 @@
     <element path="lib\as3corelib.swc" />
     <element path="lib\UltimateBlendModeShader.swc" />
     <element path="lib\jpegencoder_10092010.swc" />
+    <element path="lib\as3growl.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
