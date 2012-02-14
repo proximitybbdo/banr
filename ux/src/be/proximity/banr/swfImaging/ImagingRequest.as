@@ -73,12 +73,14 @@ package be.proximity.banr.swfImaging {
 			_currentFrame = 0;
 			_sp = new Sprite();
 			_sp.addEventListener(Event.ENTER_FRAME, onSpEnterFrame, false, 0, true);
+			//_l.content.addEventListener(Event.ENTER_FRAME, onSpEnterFrame, false, 0, true);
 		}
 		
 		private function onSpEnterFrame(e:Event):void {
 			_currentFrame++;
 			
-			if (_currentFrame > _timing * _l.contentLoaderInfo.frameRate) {
+			//trace("FRAME RATE: " + _l.contentLoaderInfo.frameRate + " " + _timing + " " + _timing * _l.contentLoaderInfo.frameRate + " " + _currentFrame/30);
+			if (_currentFrame  > _timing * 30) {
 				_sp.removeEventListener(Event.ENTER_FRAME, onSpEnterFrame, false);
 				createImage();
 			}
