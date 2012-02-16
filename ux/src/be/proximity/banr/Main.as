@@ -4,6 +4,8 @@ package be.proximity.banr {
 	import be.dreem.ui.components.form.events.ComponentDataEvent;
 	import be.dreem.ui.components.form.events.ComponentInteractiveEvent;
 	import be.proximity.banr.ui.holoInterface.events.HoloInterfaceEvent;
+	import flash.media.SoundMixer;
+	import flash.media.SoundTransform;
 	import flash.system.Capabilities;
 	
 	import be.proximity.banr.applicationData.ApplicationData;
@@ -54,7 +56,9 @@ package be.proximity.banr {
 		
 		override protected function initComponent():void {
 			
-			glass.mouseEnabled = color.mouseEnabled = false;			
+			glass.mouseEnabled = color.mouseEnabled = false;	
+			
+			SoundMixer.soundTransform = new SoundTransform(0);
 			
 			_si = new SwfImaging(15);			
 			
