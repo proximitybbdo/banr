@@ -3,11 +3,19 @@
 
   <id>BanrApp</id>
 
-  <version>3.0.2</version>
+  <version>3.0.3</version>
 
   <filename>BanrApp</filename>
 
   <description/>
+
+  
+
+
+
+  
+
+
 
   
 
@@ -77,6 +85,14 @@
 
 
 
+  
+
+
+
+  
+
+
+
   <!-- To localize the name, use the following format for the name element.<name><text xml:lang="en">English App name goes here</text><text xml:lang="fr">French App name goes here</text><text xml:lang="ja">Japanese App name goes here</text></name>-->
 
   <copyright/>
@@ -104,6 +120,10 @@
   <customUpdateUI>false</customUpdateUI>
 
   <allowBrowserInvocation>false</allowBrowserInvocation>
+
+
+
+
 
 
 

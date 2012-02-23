@@ -5,6 +5,7 @@ package be.proximity.banr.swfImaging {
 	import be.proximity.banr.swfImaging.imageEncoder.encoders.IEncoder;
 	import be.proximity.banr.swfImaging.imageEncoder.EncodingSettings;
 	import be.proximity.banr.swfImaging.imageEncoder.events.ImageEncoderEvent;
+	import be.proximity.banr.utils.StringUtils;
 	import com.adobe.images.JPGEncoder;
 	import com.adobe.images.PNGEncoder;
 	import flash.events.EventDispatcher;
@@ -198,25 +199,14 @@ package be.proximity.banr.swfImaging {
 		}		
 		
 		private function saveToFile(ir:ImagingRequest, encoded:ByteArray, es:EncodingSettings):void {
-			//trace("SwfImaging, saveToFile()");
-			///*
 			
-			//bad code
 			_enc.destroy();
 			
-			var f:File = new File(ir.file.nativePath);
-			
-			if(f.extension == null){
-				f.nativePath += es.outputFormat;
-			}
-			
-			f.nativePath = f.nativePath.split(".")[0] + "." + es.outputFormat;
-			
+			var f:File = new File(StringUtils.alterFileExtentionFromPath(ir.file.nativePath, es.outputFormat));
 			var fs:FileStream = new FileStream();
 			fs.open(f,  FileMode.WRITE);
 			fs.writeBytes(encoded,  0, encoded.length);
 			fs.close();
-			//*/
 			
 			f = null;
 			fs = null;
