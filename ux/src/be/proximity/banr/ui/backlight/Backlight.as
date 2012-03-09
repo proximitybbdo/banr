@@ -10,7 +10,7 @@ package be.proximity.banr.ui.backlight {
 	
 	/**
 	 * ...
-	 * @author 
+	 * @author Matthias Crommelinck
 	 */
 	public dynamic class Backlight extends BaseComponent {
 		

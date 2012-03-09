@@ -5,7 +5,7 @@ package be.proximity.banr.ui.filesizeIndicator {
 	
 	/**
 	 * ...
-	 * @author 
+	 * @author Matthias Crommelinck
 	 */
 	public class FilesizeIndicator extends BaseComponent {		
 		

@@ -24,7 +24,7 @@ package be.proximity.banr.ui.holoInterface {
 	
 	/**
 	 * ...
-	 * @author 
+	 * @author Matthias Crommelinck
 	 */
 	public class HoloInterface extends AbstractPushButton {
 		

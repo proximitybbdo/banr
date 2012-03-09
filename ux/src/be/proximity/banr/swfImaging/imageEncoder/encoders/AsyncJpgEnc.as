@@ -90,12 +90,6 @@ package be.proximity.banr.swfImaging.imageEncoder.encoders {
 			var shrinkRatio:Number =  desiredFileSize / fileSizeAt100Quality;
 			
 			var pixelDetail:Number = fileSizeAt100Quality / (imageHeight * imageWidth);
-			/*
-			trace("gestomateQuality fileSizeAt100Quality " + fileSizeAt100Quality);	
-			trace("gestomateQuality desiredFileSize " + desiredFileSize);
-			trace("gestomateQuality shrinkRatio " + shrinkRatio);
-			trace("gestomateQuality pixelDetail " + pixelDetail);
-			//*/
 			
 			for (var i:int = 0; i < lookupTable.length; i++)
 				if ((shrinkRatio * saveMargin /** (1/pixelDetail)*/) > lookupTable[i]) 

@@ -3,7 +3,7 @@ package be.proximity.banr.ui.holoInterface.events {
 	
 	/**
 	 * ...
-	 * @author 
+	 * @author Matthias Crommelinck
 	 */
 	public class HoloInterfaceEvent extends Event {
 		

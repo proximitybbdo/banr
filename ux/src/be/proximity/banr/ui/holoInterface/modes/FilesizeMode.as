@@ -5,7 +5,7 @@ package be.proximity.banr.ui.holoInterface.modes {
 	
 	/**
 	 * ...
-	 * @author 
+	 * @author Matthias Crommelinck
 	 */
 	public class FilesizeMode extends AbstractMode {		
 		

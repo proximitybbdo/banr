@@ -5,7 +5,7 @@ package be.proximity.banr.ui.holoInterface.components {
 	
 	/**
 	 * ...
-	 * @author 
+	 * @author Matthias Crommelinck
 	 */
 	public class Digit extends BaseComponent {
 		

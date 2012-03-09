@@ -7,7 +7,7 @@ package be.proximity.banr.ui.cornerLights {
 	
 	/**
 	 * ...
-	 * @author 
+	 * @author Matthias Crommelinck
 	 */
 	public class CornerLights extends BaseComponent {
 		

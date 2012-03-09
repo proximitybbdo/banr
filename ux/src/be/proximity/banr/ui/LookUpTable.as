@@ -1,7 +1,7 @@
 package be.proximity.banr.ui {
 	/**
 	 * ...
-	 * @author 
+	 * @author Matthias Crommelinck
 	 */
 	public class LookUpTable {
 

@@ -1,7 +1,7 @@
 package be.proximity.banr.utils {
 	/**
 	 * ...
-	 * @author 
+	 * @author Matthias Crommelinck
 	 */
 	public class StringUtils {
 		
@@ -24,12 +24,14 @@ package be.proximity.banr.utils {
 		public static function alterFileExtentionFromPath(path:String, extention:String):String {		
 			//TODO: replace with regex, and drop the MAX_FILE_EXTENTION_LENGTH
 			//should convert following examples
+			
 			/*
 			\\files.server.com\folder\filename.extention
 			\\files.server.com\folder\filename
 			C:\folder\filename.extention
 			C:\folder\filename
-			 */
+			*/
+			
 			var index:Number = path.lastIndexOf(".");			
 			if (index == -1 || (path.length - index) > MAX_FILE_EXTENTION_LENGTH )
 				return path + extention;
